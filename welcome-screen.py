@@ -3,15 +3,7 @@ import time
 
 sg.theme('DarkPurple1')
 
-# testing view of layouts only
-# see welcome-screen.py here or test-psg.py on local for whole script
-
-# blank to test transition buttons
-blankLayout = [
-    [sg.Text("")]
-]
-
-# welcLayout good - "▶" fn'ing
+# layouts
 welcLayout = [
     [sg.Column(
         [
@@ -24,7 +16,6 @@ welcLayout = [
     )]
 ]
 
-# feelsLayout good - need to connect buttons to screens
 feelsLayout = [
     [sg.Column(
         [
@@ -57,23 +48,14 @@ acknowlLayout = [
     )]
 ]
 
-# deadBabyLayout not started
-# ventLayout not started
-# storyLayout not started
-# playlistLayout not started
-# copeLayout not started
-# valuesLayout not started
-# motMsgLayout not started
-# roastLayout not started
-# miniGameLayout not started
-# brutalDeathsLayout not started
 
 welcWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", welcLayout, size=(500,400)).finalize()
-testWindow = None
-blankWindow = None
+feelsWindow = None
 
 # give the GUI a breather
 time.sleep(0.1)
+
+# now let's practice swtiching to a new window upon button click
 
 while True:
     try:
@@ -84,35 +66,20 @@ while True:
     # if welcome screen is closed directly
     if window == welcWindow and event == sg.WINDOW_CLOSED:
         welcWindow.close()
-        if testWindow:
-            testWindow.close()
+        if feelsWindow:
+            feelsWindow.close()
         break
     
     # if "▶" is clicked from welcWindow
     if window == welcWindow and event == "▶":
-        testWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", testLayout, size=(500,400)).finalize()
+        feelsWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", feelsLayout, size=(500,400)).finalize()
         welcWindow.hide()
-    
-    # if "▶" is clicked from testWindow
-    if testWindow and window == testWindow and event == "▶":
-        blankWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", blankLayout, size=(500,400)).finalize()
-
-    # close the blankWindow during testing properly
-    if blankWindow and window == blankWindow and event == sg.WINDOW_CLOSED:
-        blankWindow.close()
-        if testWindow:
-            testWindow.close()
-        break
-
-    # if "test close" button is pressed in whatever layout is being tested
-    if testWindow and window == testWindow and (event == sg.WINDOW_CLOSED or event == "test close"):
-        testWindow.close()
-        break
-    
-    
     
     # if "fine." is clicked from feelsWindow -> deadBabyWindow or ventWindow
     # if ">__<" is clicked from feelsWindow -> storyWindow or playlistWindow
     # if "drowning..." is clicked from feelsWindow -> copeWindow or valuesWindow
     # if "dO i HaVe a PerSoNaLitY dIsORdEr?" is clicked from feelsWindow -> motMsgWindow or roastWindow
     # if "*makin' moltovs*" is clicked from feelsWindow -> miniGameWindow or brutalDeathsWindow
+    if feelsWindow and window == feelsWindow and (event == sg.WINDOW_CLOSED or (event == "fine." or event ==">__<" or event == "drowning..." or event == "dO i HaVe a PerSoNaLitY dIsORdEr?" or event == "*makin' moltovs*")):
+        feelsWindow.close()
+        break

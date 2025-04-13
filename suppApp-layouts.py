@@ -29,6 +29,7 @@ feelsLayout = [
             [sg.Button("drowning...", size=(40,1), font=('Courier', 12))],
             [sg.Button("dO i HaVe a PerSoNaLitY dIsORdEr?", size=(40,1), font=('Courier', 12))],
             [sg.Button("*makin' moltovs*", size=(40,1), font=('Courier', 12))]
+            # add 'none of these' button to randomly pick from all 10 activities
         ],
         justification='center',
         element_justification='center',
@@ -141,19 +142,49 @@ def make_feels2_layout():
         )
     ]]
 
-# make_deadBab_layout() not started: mid
+# make_deadBab_layout() not started: mid -- rand msg, click to reveal, refresh button ("Another?"), done button
     # deadBabJokes dict
-# make_story_layout() not started: mid
+    
+# make_story_layout() not started: mid -- click to reveal, scrollbar, done button
     # storiesList dict
-# make_copingOpts_layout not started: easy -- dropdown sel, asks if they need another coping rem (loop back to copingOptsWindow)
-# make_guidedMed_layout not started: hard (links/gifs) + are you sure? popup
-# make_grounding_layout not started: mid + are you sure? popup
-# make_tipp_layout not started: mid, images + are you sure? popup
-# make_monMod_layout not started: mid + are you sure? popup
-# make_train_layout not started: mid + are you sure? popup
-# make_game_layout not started: hard what the mother-forker
+    
+# make_copingOpts_layout not started: easy -- dropdown sel, asks if they need another coping rem (loop back to copingOptsWindow), done button
+def make_copingOpts_layout():
+    return[[
+        sg.Column(
+            [
+                [sg.Text("Everyone needs a reminder every now and then ^_^", justification='center', font=('Courier', 12))],
+                [sg.Text(" ", font=('Courier', 20))],
+                [sg.Combo(
+                    values=['Choose for me', 'Guided Meditation', '54321 Grounding', 'TIPP Cheat Sheet', 'What We Monitor, We Modify', 'Trainspotting Tracer'],
+                    default_value='Choose for me',
+                    key='stratsOpts_dropdown',
+                    font=('Courier', 12),
+                    size=(30,1),
+                    enable_events=True,
+                    readonly=True
+                )],
+                [sg.Text(" ", font=('Courier', 20))],
+                [sg.Button("Let's begin", size=(15,1), font=('Courier', 12))]
+            ],
+            justification='center',
+            element_justification='center',
+            expand_x=True
+        )
+    ]]
 
-# make_vent_layout -- ADD "are you sure?" popup
+# make_guidedMed_layout not started: hard (links/gifs) + are you sure? popup
+
+# make_grounding_layout not started: mid + are you sure? popup
+
+# make_tipp_layout not started: mid, images + are you sure? popup
+
+# make_monMod_layout not started: mid + are you sure? popup
+
+# make_train_layout not started: mid + are you sure? popup
+
+# make_game_layout not started: hard...what the mother-forker
+
 def make_vent_layout():
     return[[
         sg.Column(
@@ -187,17 +218,25 @@ def make_vent_layout():
     ]]
 
 # make_deaths_layout not started: hard + are you sure? popup
+
 # make_deathsPop_layout not started >> ?????????
-# make_playlist_layout not started: mid
+
+# make_playlist_layout not started: mid -- rand5, refresh button ("Another?"), done button
     # playlistNames dict
     # songList dict
-# make_values_layout not started: easy
+
+# make_values_layout not started: easy -- rand msg, refresh button ("Another?"), done button
     # valuesList dict
-# make_roast_layout not started: mid
+
+# make_roast_layout not started: mid -- rand msg, click to reveal, refresh button ("Another?"), done button
     # roastList dict
-# make_motMsgs_layout not started: easy
+
+# make_motMsgs_layout not started: easy -- rand msg, refresh button ("Another?"), done button
     # motMsgs dict
+
 # make_monModChart_layout not started >> ????????
+
+
 
 # windows bank
 welcWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_welc_layout(), size=(500,400)).finalize()

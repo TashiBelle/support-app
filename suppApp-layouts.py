@@ -4,39 +4,22 @@ import random
 sg.theme('DarkPurple1')
 
 
-# blanks to test transition buttons
-blankLayout = [
-    [sg.Column(
-        [[sg.Button("done", size=(5,1), font=('Courier', 12))]],
-        justification='center',
-        element_justification='center',
-        expand_x=True
-    )]
-]
+# dictionaries
+    # welcGreetings for make_welc_layout / welcWindow
+    # acknowlMsgs for make_acknowl_Layout / acknowlWindow
+    # checkinMsgs for make_check_layout / checkWindow (y/n only)
+    # successMsgs for Yeh :) popup in checkWindow
+    # deadBabJokes for make_deadBab_layout in deadBabWindow
+    # storiesList for make_story_layout in storyWindow
+    # playlistNames for make_playlist_layout in playlistWindow
+    # songList for make_playlist_layout in playlistWindow
+    # valuesList for make_values_layout in valuesWindow
+    # roastList for make_roast_layout in roastWindow
+    # motMsgs for make_motMsgs_layout in motMsgsWindow
+    # followUpMsgs for make_followup_layout in followUpWindow
 
-blank2Layout = [    
-    [sg.Column(
-        [[sg.Button("▶", size=(3,1), font=('Courier', 20))]],
-        justification='center',
-        element_justification='center',
-        expand_x=True
-    )]
-]
 
-# welcLayout good - "▶" fn'ing
-welcLayout = [
-    [sg.Column(
-        [
-            [sg.Text("────⋆˖⁺‧₊☽◯☾₊‧⁺˖⋆────", justification='center', font=('Courier', 20))],
-            [sg.Text("Ready to get started?", justification='center', font=('Courier', 20))],
-            [sg.Button("▶", size=(3,1), font=('Courier', 20))]],
-        justification='center',
-        element_justification='center',
-        expand_x=True
-    )]
-]
-
-#feelsLayout -- layout good; buttons good; trans to acknowlLayout good; saves input good
+#feelsLayout good
 feelsLayout = [
     [sg.Column(
         [
@@ -53,34 +36,28 @@ feelsLayout = [
     )]
 ]
 
-# deadBabLayout not started
-# storyLayout not started
-# copingOptsLayout not started
-# guidedMedLayout not started
-# 54321Layout not started
-# tippLayout not started
-# monModLayout not started
-# trainLayout not started
-# gameLayout not started
-# ventLayout not started
-# deathsLayout not started
-# deathsPopLayout not started
-# playlistLayout not started
-# valuesLayout not started
-# roastLayout not started
-# motMsgsLayout not started
-# monModChartLayout not started
-
 # empty variables for later
 feelInput = None #records input from feelsLayout emotion
 checkInput = None #decides whether to go back to welc or go to feels2
 
 # functions
+def make_blank_layout():
+    return[[
+        sg.Column(
+            [
+                [sg.Button("done", size=(5,1), font=('Courier', 12))]],
+            justification='center',
+            element_justification='center',
+            expand_x=True
+    )
+    ]]
+
 def make_welc_layout():
     return[[
         sg.Column(
             [
                 [sg.Text("────⋆˖⁺‧₊☽◯☾₊‧⁺˖⋆────", justification='center', font=('Courier', 20))],
+                # welcGreetings dict
                 [sg.Text("Ready to get started?", justification='center', font=('Courier', 20))],
                 [sg.Text(" ", font=('Courier', 20))],
                 [sg.Button("▶", size=(10,1), font=('Courier', 18))]
@@ -96,11 +73,10 @@ def make_acknowl_layout():
         sg.Column(
         [
             [sg.Text(" ", size=(1,3))],
+            # acknowlMsgs dict
             [sg.Text("That's rough, buddy.", justification='center', font=('Courier', 18))],
             [sg.Text(" ", size=(1,1))],
-            [sg.Button("go back", size=(5,1), font=('Courier', 20)),
-             sg.Text("          ", justification='center', font=('Courier', 20)),
-             sg.Button("▶", size=(5,1), font=('Courier', 12))]
+            [sg.Button("▶", size=(10,1), font=('Courier', 12))]
         ],
         justification='center',
         element_justification='center',
@@ -112,6 +88,7 @@ def make_check_layout():
     return[[
         sg.Column(
         [
+            # checkinMsgs dict
             [sg.Text("Sooooo...feelin' any better?", justification='center', font=('Courier', 18))],
             [sg.Text(" ", font=('Courier', 20))],
             [sg.Button("yeh :)", size=(6,1), font=('Courier', 12)),
@@ -128,6 +105,7 @@ def make_followup_layout():
     return[[
         sg.Column(
             [
+                # followUpMsgs dict
                 [sg.Text("Wow, look at you doing the thing!", justification='center', font=('Courier', 20))],
                 [sg.Text("Deep breath...", justification='center', font=('Courier', 14))],
                 [sg.Text(" ", font=('Courier', 20))],
@@ -163,6 +141,63 @@ def make_feels2_layout():
         )
     ]]
 
+# make_deadBab_layout() not started: mid
+    # deadBabJokes dict
+# make_story_layout() not started: mid
+    # storiesList dict
+# make_copingOpts_layout not started: easy -- dropdown sel, asks if they need another coping rem (loop back to copingOptsWindow)
+# make_guidedMed_layout not started: hard (links/gifs) + are you sure? popup
+# make_grounding_layout not started: mid + are you sure? popup
+# make_tipp_layout not started: mid, images + are you sure? popup
+# make_monMod_layout not started: mid + are you sure? popup
+# make_train_layout not started: mid + are you sure? popup
+# make_game_layout not started: hard what the mother-forker
+
+# make_vent_layout -- ADD "are you sure?" popup
+def make_vent_layout():
+    return[[
+        sg.Column(
+            [
+                [sg.Text("Go ahead. Let it all out.", 
+                        justification='center',
+                        font=('Courier', 14))],
+                [sg.Text("Nothing you type will be saved, and this app has no internet access.", 
+                        justification='left',
+                        font=('Courier', 8))],
+                [sg.Text("You're all good to say it like it is!", 
+                        justification='left',
+                        font=('Courier', 8))],
+                [sg.Text("", font=('Courier', 8))],
+                [sg.Multiline(
+                    default_text='',
+                    size=(50,15),
+                    font=('Courier', 12),
+                    key='ventBox',
+                    border_width=2,
+                    expand_x=True,
+                    expand_y=True
+                )],
+                [sg.Text("", font=('Courier', 12))],
+                [sg.Button("done", size=(10,1), font=('Courier', 12))]
+            ],
+            justification='center',
+            element_justification='center',
+            expand_x=True
+        )
+    ]]
+
+# make_deaths_layout not started: hard + are you sure? popup
+# make_deathsPop_layout not started >> ?????????
+# make_playlist_layout not started: mid
+    # playlistNames dict
+    # songList dict
+# make_values_layout not started: easy
+    # valuesList dict
+# make_roast_layout not started: mid
+    # roastList dict
+# make_motMsgs_layout not started: easy
+    # motMsgs dict
+# make_monModChart_layout not started >> ????????
 
 # windows bank
 welcWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_welc_layout(), size=(500,400)).finalize()
@@ -177,11 +212,11 @@ ventWindow = None #no layout made
 storyWindow = None #no layout made
 playlistWindow = None #no layout made
 copingOptsWindow = None #no layout made
-# guidedMedLayout not started
-# 54321Layout not started
-# tippLayout not started
-# monModLayout not started
-# trainLayout not started
+guidedMedWindow = None #not started
+groundingWindow = None #not started
+tippWindow = None #not started
+monModWindow = None #not started
+trainWindow = None #not started
 valuesWindow = None #no layout made
 motMsgsWindow = None #no layout made
 roastWindow = None #no layout made
@@ -203,6 +238,11 @@ open_windows = [
     storyWindow,
     playlistWindow,
     copingOptsWindow,
+    guidedMedWindow,
+    groundingWindow,
+    tippWindow,
+    monModWindow,
+    trainWindow,
     valuesWindow,
     motMsgsWindow,
     roastWindow,
@@ -238,7 +278,7 @@ while True:
         if event in ("fine.", ">__<", "drowning...", "dO i HaVe a PerSoNaLitY dIsORdEr?", "*makin' moltovs*"):
             feelInput = event
             acknowlWindow = sg.Window (f"{event}", make_acknowl_layout(), size=(500,400)).finalize()
-            feelsWindow.hide()
+            feelsWindow.close()
 
     # trans to rand sel on next screen after "▶" is clicked from acknowlWindow
     if acknowlWindow and window == acknowlWindow and event == "▶":
@@ -249,60 +289,65 @@ while True:
             next_screen = random.choice(["fine1", "fine2"])
             if next_screen == "fine1":
                 # placeholder for deadBabWindow
-                deadBabWindow = sg.Window("fine1", blankLayout, size=(500,400)).finalize()
+                deadBabWindow = sg.Window("fine1", make_blank_layout(), size=(500,400)).finalize()
             else:
-                # placeholder for ventWindow
-                ventWindow = sg.Window("fine2", blankLayout, size=(500,400)).finalize()
+                ventWindow = sg.Window("fine2", make_vent_layout(), size=(500,400)).finalize()
                 
         elif feelInput == ">__<":
             next_screen = random.choice([">__<1", ">__<2"])
             if next_screen == ">__<1":
                 # placeholder for storyWindow
-                storyWindow = sg.Window(">__<1", blankLayout, size=(500,400)).finalize()
+                storyWindow = sg.Window(">__<1", make_blank_layout(), size=(500,400)).finalize()
             else:
                 # placeholder for playlistWindow
-                playlistWindow = sg.Window(">__<2", blankLayout, size=(500,400)).finalize()
+                playlistWindow = sg.Window(">__<2", make_blank_layout(), size=(500,400)).finalize()
                 
         elif feelInput == "drowning...":
             next_screen = random.choice(["drown1, drown2"])
             if next_screen == "drown1":
                 # placeholder for copingWindow
-                copingOptsWindow = sg.Window("drown1", blankLayout, size=(500,400)).finalize()
+                copingOptsWindow = sg.Window("drown1", make_blank_layout(), size=(500,400)).finalize()
             else:
                 # placeholder for valuesWindow
-                valuesWindow = sg.Window("drown2", blankLayout, size=(500,400)).finalize()
+                valuesWindow = sg.Window("drown2", make_blank_layout(), size=(500,400)).finalize()
                 
         elif feelInput == "dO i HaVe a PerSoNaLitY dIsORdEr?":
             next_screen = random.choice(["persDis1", "persDis2"])
             if next_screen == "persDis1":
                 # placeholder for motMsgsWindow
-                motMsgsWindow = sg.Window("persDis1", blankLayout, size=(500,400)).finalize()
+                motMsgsWindow = sg.Window("persDis1", make_blank_layout(), size=(500,400)).finalize()
             else:
                 # placeholder for roastWindow
-                roastWindow = sg.Window("persDis2", blankLayout, size=(500,400)).finalize()
+                roastWindow = sg.Window("persDis2", make_blank_layout(), size=(500,400)).finalize()
     
         else:
             next_screen = random.choice(["moltovs1", "moltovs2"])
             if next_screen == "moltovs1":
                 # placeholder for gameWindow
-                gameWindow = sg.Window("moltovs1", blankLayout, size=(500,400)).finalize()
+                gameWindow = sg.Window("moltovs1", make_blank_layout(), size=(500,400)).finalize()
             else:
                 # placeholder for deathsWindow
-                deathsWindow = sg.Window("moltovs2", blankLayout, size=(500,400)).finalize()
-                
-    elif acknowlWindow and window == acknowlWindow and event == "go back":
-        acknowlWindow.close()
-        acknowlWindow = None
-        feelsWindow.unhide()
-                
+                deathsWindow = sg.Window("moltovs2", make_blank_layout(), size=(500,400)).finalize()
+                         
     # placeholder windows and "done" buttons for all activities during testing main screens
     if window and event == "done":
         if deadBabWindow:
             followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
             deadBabWindow.close()
+            
         elif ventWindow:
-            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
-            ventWindow.close()
+            vent_conf = sg.popup_yes_no(
+                "Are you sure? You can't go back later.",
+                title=("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•"),
+                font=('Courier', 14)
+            )
+            if vent_conf == 'YES':
+                ventWindow.close()
+                ventWindow = None
+                followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
+            elif vent_conf == 'NO':
+                pass
+            
         elif storyWindow:
             followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
             storyWindow.close()
@@ -339,6 +384,7 @@ while True:
         if event == "yeh :)":
             checkInput = "yeh"
             result = sg.popup_ok(
+                # successMsgs dict
                 "Yayyyyy!!! Even a tiny bit better is a win :)  Have a great rest of your day!", 
                 title="You did it!", 
                 font=('Courier', 14), 
@@ -360,3 +406,38 @@ while True:
                 feels2Window = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_feels2_layout(), size=(500,400)).finalize()
             else:
                 pass
+    
+    if feels2Window and window == feels2Window:
+        if event == "Ready!":
+            copSel = values['copingOpts_dropdown']
+            
+            if copSel == "Surprise Me":
+                randAct = random.choice(['deadBabies', 'vent', 'story', 'playlist', 'strategies'])
+                copSel = {
+                    'deadBabies': "Dead Baby Jokes",
+                    'vent': "Vent (scream in the void)",
+                    'story': "Storytime",
+                    'playlist': "Random Rage Playlist",
+                    'strategies': "Coping Strategy Reminders"
+                }[randAct]
+                
+            if copSel == "Dead Baby Jokes":
+                feels2Window.close()
+                feels2Window = None
+                blankWindow = sg.Window("dead babies", make_blank_layout(), size=(500,400)).finalize()
+            elif copSel == "Vent (scream in the void)":
+                feels2Window.close()
+                feels2Window = None
+                ventWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_vent_layout(), size=(500,400)).finalize()
+            elif copSel == "Storytime":
+                feels2Window.close()
+                feels2Window = None
+                blankWindow = sg.Window("story", make_blank_layout(), size=(500,400)).finalize()
+            elif copSel == "Random Rage Playlist":
+                feels2Window.close()
+                feels2Window = None
+                blankWindow = sg.Window("playlist", make_blank_layout(), size=(500,400)).finalize()
+            elif copSel == "Coping Strategy Reminders":
+                feels2Window.close()
+                feels2Window = None
+                blankWindow = sg.Window("strategies", make_blank_layout(), size=(500,400)).finalize()

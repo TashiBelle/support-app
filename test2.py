@@ -144,6 +144,7 @@ def make_feels2_layout():
 # make_train_layout not started: mid + are you sure? popup
 # make_game_layout not started: hard what the mother-forker
 
+# make_vent_layout -- ADD "are you sure?" popup
 def make_vent_layout():
     return[[
         sg.Column(
@@ -309,10 +310,10 @@ while True:
             next_screen = random.choice(["moltovs1", "moltovs2"])
             if next_screen == "moltovs1":
                 # placeholder for gameWindow
-                gameWindow = sg.Window("moltovs1", make_blank_layout(), size=(500,400)).finalize()
+                gameWindow = sg.Window("moltovs1", blankLayout, size=(500,400)).finalize()
             else:
                 # placeholder for deathsWindow
-                deathsWindow = sg.Window("moltovs2", make_blank_layout(), size=(500,400)).finalize()
+                deathsWindow = sg.Window("moltovs2", blankLayout, size=(500,400)).finalize()
                          
     # placeholder windows and "done" buttons for all activities during testing main screens
     if window and event == "done":
@@ -425,3 +426,29 @@ while True:
                 feels2Window.close()
                 feels2Window = None
                 blankWindow = sg.Window("strategies", make_blank_layout(), size=(500,400)).finalize()
+       
+       
+        elif event == "Dead Baby Jokes":
+            feels2Window.close()
+            feels2Window = None
+            blankWindow = sg.Window("dead babies", make_blank_layout(), size=(500,400)).finalize()
+        
+        elif event == "Vent (scream in the void)":
+            feels2Window.close()
+            feels2Window = None
+            ventWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_vent_layout(), size=(500,400)).finalize()
+        
+        elif event == "Storytime":
+            feels2Window.close()
+            feels2Window = None
+            blankWindow = sg.Window("story", make_blank_layout(), size=(500,400)).finalize()
+        
+        elif event == "Random Rage Playlist":
+            feels2Window.close()
+            feels2Window = None
+            blankWindow = sg.Window("playlist", make_blank_layout(), size=(500,400)).finalize()
+        
+        elif event == "Coping Strategy Reminders":
+            feels2Window.close()
+            feels2Window = None
+            blankWindow = sg.Window("strategies", make_blank_layout(), size=(500,400)).finalize()

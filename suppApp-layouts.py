@@ -1,10 +1,8 @@
-# testing one layout and window at a time...
-
 import PySimpleGUI as sg
 import time
 import random
-
 sg.theme('DarkPurple1')
+
 
 # blanks to test transition buttons
 blankLayout = [
@@ -43,11 +41,11 @@ feelsLayout = [
     [sg.Column(
         [
             [sg.Text("So...how ya feelin'?", justification='center', font=('Courier', 20))],
-            [sg.Button("fine.", size=(5,1), font=('Courier', 12))],
-            [sg.Button(">__<", size=(5,1), font=('Courier', 12))],
-            [sg.Button("drowning...", size=(12,1), font=('Courier', 12))],
+            [sg.Button("fine.", size=(40,1), font=('Courier', 12))],
+            [sg.Button(">__<", size=(40,1), font=('Courier', 12))],
+            [sg.Button("drowning...", size=(40,1), font=('Courier', 12))],
             [sg.Button("dO i HaVe a PerSoNaLitY dIsORdEr?", size=(40,1), font=('Courier', 12))],
-            [sg.Button("*makin' moltovs*", size=(20,1), font=('Courier', 12))]
+            [sg.Button("*makin' moltovs*", size=(40,1), font=('Courier', 12))]
         ],
         justification='center',
         element_justification='center',
@@ -55,48 +53,6 @@ feelsLayout = [
     )]
 ]
 
-# !!!! Add back button
-# acknowlLayout -- layout good; cont. button good; trans to rand. window based on input from feelsLayout good
-acknowlLayout = [
-    [sg.Column(
-        [
-            [sg.Text(" ", size=(1,3))],
-            [sg.Text("That's rough, buddy.", justification='center', font=('Courier', 18))],
-            [sg.Text(" ", size=(1,1))],
-            [sg.Button("▶", size=(3,1), font=('Courier', 20))]
-        ],
-        justification='center',
-        element_justification='center',
-        expand_x=True
-    )]
-]
-
-# checkLayout -- layout good, popups working (not formatted well), buttons good 
-checkLayout = [
-    [sg.Column(
-        [
-            [sg.Text("Sooooo...feelin' any better?", justification='center', font=('Courier', 18))],
-            [sg.Button("Yeh :)", size=(6,1), font=('Courier', 12)),
-             sg.Text("          ", justification='center', font=('Courier', 12)),
-             sg.Button("no.", size=(3,1), font=('Courier', 12))]
-        ],
-        justification='center',
-        element_justification='center',
-        expand_x=True
-    )]
-]
-
-# feelsLayout2 not started -- blank!
-feels2Layout = [    
-    [sg.Column(
-        [[sg.Button("▶", size=(3,1), font=('Courier', 20))]],
-        justification='center',
-        element_justification='center',
-        expand_x=True
-    )]
-]
-
-# successPopLayout not started
 # deadBabLayout not started
 # storyLayout not started
 # copingOptsLayout not started
@@ -105,7 +61,7 @@ feels2Layout = [
 # tippLayout not started
 # monModLayout not started
 # trainLayout not started
-# miniGameLayout not started
+# gameLayout not started
 # ventLayout not started
 # deathsLayout not started
 # deathsPopLayout not started
@@ -113,29 +69,124 @@ feels2Layout = [
 # valuesLayout not started
 # roastLayout not started
 # motMsgsLayout not started
-# followUpLayout not started
-# monModPopLayout not started
-# suppRejPopLayout not started
+# monModChartLayout not started
+
+# empty variables for later
+feelInput = None #records input from feelsLayout emotion
+checkInput = None #decides whether to go back to welc or go to feels2
+
+# functions
+def make_welc_layout():
+    return[[
+        sg.Column(
+            [
+                [sg.Text("────⋆˖⁺‧₊☽◯☾₊‧⁺˖⋆────", justification='center', font=('Courier', 20))],
+                [sg.Text("Ready to get started?", justification='center', font=('Courier', 20))],
+                [sg.Text(" ", font=('Courier', 20))],
+                [sg.Button("▶", size=(10,1), font=('Courier', 18))]
+            ],
+        justification='center',
+        element_justification='center',
+        expand_x=True
+        )
+    ]]
+
+def make_acknowl_layout():
+    return[[
+        sg.Column(
+        [
+            [sg.Text(" ", size=(1,3))],
+            [sg.Text("That's rough, buddy.", justification='center', font=('Courier', 18))],
+            [sg.Text(" ", size=(1,1))],
+            [sg.Button("go back", size=(5,1), font=('Courier', 20)),
+             sg.Text("          ", justification='center', font=('Courier', 20)),
+             sg.Button("▶", size=(5,1), font=('Courier', 12))]
+        ],
+        justification='center',
+        element_justification='center',
+        expand_x=True
+        )
+    ]]
+
+def make_check_layout():
+    return[[
+        sg.Column(
+        [
+            [sg.Text("Sooooo...feelin' any better?", justification='center', font=('Courier', 18))],
+            [sg.Text(" ", font=('Courier', 20))],
+            [sg.Button("yeh :)", size=(6,1), font=('Courier', 12)),
+             sg.Text("          ", justification='center', font=('Courier', 12)),
+             sg.Button("no.", size=(3,1), font=('Courier', 12))]
+        ],
+        justification='center',
+        element_justification='center',
+        expand_x=True
+        )
+    ]]
+
+def make_followup_layout():
+    return[[
+        sg.Column(
+            [
+                [sg.Text("Wow, look at you doing the thing!", justification='center', font=('Courier', 20))],
+                [sg.Text("Deep breath...", justification='center', font=('Courier', 14))],
+                [sg.Text(" ", font=('Courier', 20))],
+                [sg.Button("continue", size=(10,1), font=('Courier', 12))]
+            ],
+            justification='center',
+            element_justification='center',
+            expand_x=True
+        )
+    ]]
+
+def make_feels2_layout():
+    return[[
+        sg.Column(
+        [
+            [sg.Text("What would be most helpful right now?", justification='center', font=('Courier', 20))],
+            [sg.Text(" ", font=('Courier', 20))],
+            [sg.Combo(
+                values=['Surprise Me', 'Dead Baby Jokes', 'Vent (scream in the void)', 'Storytime', 'Random Rage Playlist', 'Coping Strategy Reminders'],
+                default_value='Surprise Me',
+                key='copingOpts_dropdown',
+                font=('Courier', 12),
+                size=(30,1),
+                enable_events=True,
+                readonly=True
+            )],
+            [sg.Text(" ", font=('Courier', 20))],
+            [sg.Button("Ready!", size=(10,1), font=('Courier', 12))]
+        ],
+        justification='center',
+        element_justification='center',
+        expand_x=True
+        )
+    ]]
 
 
-welcWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", welcLayout, size=(500,400)).finalize()
+# windows bank
+welcWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_welc_layout(), size=(500,400)).finalize()
 testWindow = None
 acknowlWindow = None
 feelsWindow = None
 checkWindow = None
 feels2Window = None
 followUpWindow = None
-
-deadBabWindow = None #testing with feelsWindow and acknowlWindow, placeholders for activity vvv
-ventWindow = None 
-storyWindow = None
-playlistWindow = None
-copingOptsWindow = None
-valuesWindow = None
-motMsgsWindow = None
-roastWindow = None
-gameWindow = None
-deathsWindow = None
+deadBabWindow = None #no layout made
+ventWindow = None #no layout made
+storyWindow = None #no layout made
+playlistWindow = None #no layout made
+copingOptsWindow = None #no layout made
+# guidedMedLayout not started
+# 54321Layout not started
+# tippLayout not started
+# monModLayout not started
+# trainLayout not started
+valuesWindow = None #no layout made
+motMsgsWindow = None #no layout made
+roastWindow = None #no layout made
+gameWindow = None #no layout made
+deathsWindow = None #no layout made
 
 blankWindow = None #testing screen needed to replace unmade follow-up screens
 
@@ -159,19 +210,6 @@ open_windows = [
     deathsWindow,
     blankWindow]
 
-feelInput = None #records input from feelsLayout emotion
-checkInput = None #decides whether to go back to welc or go to feels2
-
-def make_followup_layout():
-    return[[
-        sg.Column(
-            [[sg.Button("continue", size=(10,1), font=('Courier', 12))]],
-            justification='center',
-            element_justification='center',
-            expand_x=True
-        )
-    ]]
-
 # give the GUI a breather
 time.sleep(0.1)
 
@@ -192,18 +230,20 @@ while True:
     # trans to testWindow when "▶" is clicked from welcWindow
     if window == welcWindow and event == "▶":
         feelsWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", feelsLayout, size=(500,400)).finalize()
-        welcWindow.hide()
+        welcWindow.close()
+        welcWindow = None
     
     # trans to acknowlWindow when any button is clicked from feelsLayout (testWindow)
     if feelsWindow and window == feelsWindow:
         if event in ("fine.", ">__<", "drowning...", "dO i HaVe a PerSoNaLitY dIsORdEr?", "*makin' moltovs*"):
             feelInput = event
-            acknowlWindow = sg.Window (f"{event}", acknowlLayout, size=(500,400)).finalize()
-            feelsWindow.close()
+            acknowlWindow = sg.Window (f"{event}", make_acknowl_layout(), size=(500,400)).finalize()
+            feelsWindow.hide()
 
     # trans to rand sel on next screen after "▶" is clicked from acknowlWindow
     if acknowlWindow and window == acknowlWindow and event == "▶":
         acknowlWindow.close()
+        acknowlWindow = None
         
         if feelInput == "fine.":
             next_screen = random.choice(["fine1", "fine2"])
@@ -250,54 +290,73 @@ while True:
                 # placeholder for deathsWindow
                 deathsWindow = sg.Window("moltovs2", blankLayout, size=(500,400)).finalize()
                 
+    elif acknowlWindow and window == acknowlWindow and event == "go back":
+        acknowlWindow.close()
+        acknowlWindow = None
+        feelsWindow.unhide()
+                
     # placeholder windows and "done" buttons for all activities during testing main screens
     if window and event == "done":
         if deadBabWindow:
-            followUpWindow = sg.Window("placeholder for followUpLayout", make_followup_layout(), size=(500,400)).finalize()
+            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
             deadBabWindow.close()
         elif ventWindow:
-            followUpWindow = sg.Window("placeholder for followUpLayout", make_followup_layout(), size=(500,400)).finalize()
+            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
             ventWindow.close()
         elif storyWindow:
-            followUpWindow = sg.Window("placeholder for followUpLayout", make_followup_layout(), size=(500,400)).finalize()
+            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
             storyWindow.close()
         elif playlistWindow:
-            followUpWindow = sg.Window("placeholder for followUpLayout", make_followup_layout(), size=(500,400)).finalize()
+            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
             playlistWindow.close()
         elif copingOptsWindow:
-            followUpWindow = sg.Window("placeholder for followUpLayout", make_followup_layout(), size=(500,400)).finalize()
+            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
             copingOptsWindow.close() 
         elif valuesWindow:
-            followUpWindow = sg.Window("placeholder for followUpLayout", make_followup_layout(), size=(500,400)).finalize()
+            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
             valuesWindow.close() 
         elif motMsgsWindow:
-            followUpWindow = sg.Window("placeholder for followUpLayout", make_followup_layout(), size=(500,400)).finalize()
+            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
             motMsgsWindow.close() 
         elif roastWindow:
-            followUpWindow = sg.Window("placeholder for followUpLayout", make_followup_layout(), size=(500,400)).finalize()
+            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
             roastWindow.close() 
         elif gameWindow:
-            followUpWindow = sg.Window("placeholder for followUpLayout", make_followup_layout(), size=(500,400)).finalize()
+            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
             gameWindow.close() 
         else:
-            followUpWindow = sg.Window("placeholder for followUpLayout", make_followup_layout(), size=(500,400)).finalize()
+            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
             deathsWindow.close()
     
+    # trans from followUpWindow to checkWindow
     if followUpWindow and window == followUpWindow and event == "continue":
-        checkWindow = sg.Window("just checkin' in...", checkLayout, size=(500,400)).finalize()
+        checkWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_check_layout(), size=(500,400)).finalize()
         followUpWindow.close()
-             
+        followUpWindow = None
+    
+    # trans from checkWindow > popups > exit OR follow2Window
     if checkWindow and window == checkWindow:
-        if event == "Yeh :)":
+        if event == "yeh :)":
             checkInput = "yeh"
-            sg.popup_ok("Yayyyyy!!! You'll now return to the welcome screen :)")
-        else:
-            checkInput == "naw"
-            sg.popup_ok("Rada rada rada... let's try something else...")
-        
-        # ISSUE 1: welcLayout already used...can I just .reopen()?
-        # ISSUE 2: how to handlre continuous loop back to feels2 as needed?
-        if checkInput == "yeh":
-            welcWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", welcLayout, size=(500,400)).finalize()
-        else:
-            feels2Window = sg.Window("placeholder for feels2Layout", feels2Layout, size=(500,400)).finalize()
+            result = sg.popup_ok(
+                "Yayyyyy!!! Even a tiny bit better is a win :)  Have a great rest of your day!", 
+                title="You did it!", 
+                font=('Courier', 14), 
+            )
+            if result != 'OK':
+                pass
+            else: 
+                break
+                
+        elif event == "no.":
+            checkInput = "naw"
+            result = sg.popup_ok(
+                "Rada rada rada... let's try something else...",
+                title="womp womp",
+                font=('Courier', 14),
+            )
+            if result == 'OK':
+                checkWindow.close()
+                feels2Window = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_feels2_layout(), size=(500,400)).finalize()
+            else:
+                pass

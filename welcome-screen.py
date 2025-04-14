@@ -1,86 +1,104 @@
-import PySimpleGUI as sg
-import time
-import random
+oldSongsList = {
+    1: "'Jekyll and Hyde' - Five Finger Death Punch",
+    2: "'Under and Over' - Five Finger Death Punch",
+    3: "'Duality' - Slipknot",
+    4: "'Down with the Sickness' - Disturbed",
+    5: "'Freak on a Leash' - Korn",
+    6: "'Chop Suey!' - System of a Down",
+    7: "'Killing in the Name' - Rage Against the Machine",
+    8: "'Throne' - Bring Me the Horizon",
+    9: "'STUPID' - Ashnikko ft. Yung Baby Tate",
+    10: "'Deal With It' - Ashnikko ft. Kelis",
+    11: "'Vroom Vroom' - Charli XCX",
+    12: "'Used to Know Me' - Charli XCX",
+    13: "'DEATH OF A PREDATOR' - Banshee",
+    14: "'Demons' - Doja Cat",
+    15: "'X' - Poppy",
+    16: "'I miss myself' - Renforshort",
+    17: "'I Eat Boys' - Chloe Moriondo",
+    18: "'Rage' - Rico Nasty",
+    19: "'Witchyman' - Cain Culto",
+    20: "'Eat Me' - Demi Lovato ft. Royal & the Serpent",
+    21: "'Fake It' - Seether",
+    22: "'Riot' - Three Days Grace",
+    23: "'crushcrushcrush' - Paramore",
+    24: "'Hail to the King' - Avenged Sevenfold",
+    25: "'Voices' - Motionless in White",
+    26: "'Dethrone' - Bad Omens",
+    27: "'I Stand Alone' - Godsmack",
+    28: "'Push It' - Static-X",
+    29: "'212' - Azaelia Banks",
+    30: "'Monster' - Skillet",
+    31: "'Happy?' - Mudvane",
+    32: "'Jenny' - Nothing More",
+    33: "'Sad Femme Club' - Kimmortal",
+    34: "'My Agenda' - Dorian Electra",
+    35: "'Antagonist' - Nova Twins",
+    36: "'Pink Rover' - Scene Queen",
+    37: "'STFU!' - Rina Sawayama",
+    38: "'Bitch' - Allie X",
+    39: "'CVNT' - Sophie Hunter",
+    40: "'Sorry' - Meg Myers",
+    41: "'Life Alert' - Chase Icon",
+    42: "'Black Sheep' - Kailee Morgue",
+    43: "'Cheerleader' - Ashniiko",
+    44: "'Daisy' - Ashnikko",
+    45: "'Humble' - Ren ft. Eden Nash",
+    46: "'spy?' - WHOKILLEDXIX",
+    47: "'Snap Out Of It' - Arctic Monkeys",
+    48: "'sloppy' - KiNG MALA ft. UPSAHL",
+    49: "'fight!' - Sophie Hunter",
+    50: "'Brutus' - The Buttress (XD)",
+    51: "'You're Not Welcome' - Naethan Apollo",
+    52: "'f**k it, I'm the man' - SEB",
+    53: "'I Hope You Die in a Fire' - Grand Commander",
+    54: "'RAGE' - Samantha Margret",
+    55: "'Non, je ne regrette rien' - Edith Piaf",
+    56: "'Bloody Mary' - Lady Gaga",
+    57: "'Sour Candy' - Lady Gaga ft. BLACKPINK",
+    58: "'I FINK YOU FREEKY' - Die Antwoord",
+    59: "'Sweet but Psycho' - Ava Max",
+    60: "'Psychosocial' - Slipknot",
+    61: "'The Devil in I' - Slipknot",
+    62: "'Lift Me Up' - Five Finger Death Punch",
+    63: "'The Way of the Fist' - Five Finger Death Punch",
+    64: "'Indestructible' - Disturbed",
+    65: "'Ten Thousand Fists' - Disturbed",
+    66: "'Coming Undone' - Korn",
+    67: "'Did My Time' - Korn",
+    68: "'Testify' - Rage Against the Machine",
+    69: "'Bulls or Parade' - Rage Against the Machine",
+    70: "'Enemy' - Sevendust",
+    71: "'Last Resort' - Papa Roach",
+    72: "'Dig' - Mudvane",
+    73: "'Bodies' - Drowning Pool",
+    74: "'The Red' - Chevelle",
+    75: "'Animal I Have Become' - Three Days Grace",
+    76: "'Boom' - P.O.D.",
+    77: "'Ladies and Gentlemen' - Saliva",
+    78: "'When Worlds Collide' - Powerman 5000",
+    79: "'Pink Panther' - Scene Queen",
+    80: "'Barbie & Ken' - Scene Queen ft. Set It Off",
+    81: "'DIRTBIKE' - Zheani",
+    82: "'BLOODMONEY' - Poppy",
+    83: "'FACE SHOPPING' - Sophie",
+    84: "'100 Bad' - Tommy Genesis",
+    85: "'Bleeding in the Studio' - Alice Longyu Gao",
+    86: "'Flamboyant' - Dorian Electra",
+    87: "'XS' - Rina Sawayama",
+    88: "'PHUCKBOI REJECTS' - Royal & the Serpent",
+    89: "'People I Don't Like' - UPSAHL",
+    90: "'N.A.V.E.' - Cazzu",
+    91: "'Serial Killer' - Slayyyter",
+    92: "'KLK' - Arca ft. Rosalia",
+    93: "'Head Like a Hole' - Nine Inch Nails",
+    94: "'The Beautiful People' - Marilyn Manson",
+    95: "'Sober' - Tool",
+    96: "'Violet' - Hole",
+    97: "'Zero' -  Smashing Pumpkins",
+    98: "'Dragula' - Rod Zombie",
+    99: "'Shitlist' - L7",
+    100: "'I'm Not Okay (I Promise)' - My Chemical Romance"
+}
 
-sg.theme('DarkPurple1')
-
-# layouts
-welcLayout = [
-    [sg.Column(
-        [
-            [sg.Text("────⋆˖⁺‧₊☽◯☾₊‧⁺˖⋆────", justification='center', font=('Courier', 20))],
-            [sg.Text("Ready to get started?", justification='center', font=('Courier', 20))],
-            [sg.Button("▶", size=(3,1), font=('Courier', 20))]],
-        justification='center',
-        element_justification='center',
-        expand_x=True
-    )]
-]
-
-feelsLayout = [
-    [sg.Column(
-        [
-            [sg.Text("So...how ya feelin'?", justification='center', font=('Courier', 20))],
-            [sg.Button("fine.", size=(5,1), font=('Courier', 12))],
-            [sg.Button(">__<", size=(5,1), font=('Courier', 12))],
-            [sg.Button("drowning...", size=(12,1), font=('Courier', 12))],
-            [sg.Button("dO i HaVe a PerSoNaLitY dIsORdEr?", size=(40,1), font=('Courier', 12))],
-            [sg.Button("*makin' moltovs*", size=(20,1), font=('Courier', 12))]
-        ],
-        justification='center',
-        element_justification='center',
-        expand_x=True
-    )]
-]
-
-# acknowlLayout good - connect button to next (randoly chosen based on pre sel) screen
-# add dictionary to randomize "that's rough, buddy" msg
-acknowlLayout = [
-    [sg.Column(
-        [
-            [sg.Text(" ", size=(1,3))],
-            [sg.Text("That's rough, buddy.", justification='center', font=('Courier', 18))],
-            [sg.Text(" ", size=(1,1))],
-            [sg.Button("▶", size=(12,1), font=('Courier', 12))]
-        ],
-        justification='center',
-        element_justification='center',
-        expand_x=True
-    )]
-]
-
-
-welcWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", welcLayout, size=(500,400)).finalize()
-feelsWindow = None
-
-# give the GUI a breather
-time.sleep(0.1)
-
-# now let's practice swtiching to a new window upon button click
-
-while True:
-    try:
-        window, event, values = sg.read_all_windows()
-    except:
-        continue
-    
-    # if welcome screen is closed directly
-    if window == welcWindow and event == sg.WINDOW_CLOSED:
-        welcWindow.close()
-        if feelsWindow:
-            feelsWindow.close()
-        break
-    
-    # if "▶" is clicked from welcWindow
-    if window == welcWindow and event == "▶":
-        feelsWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", feelsLayout, size=(500,400)).finalize()
-        welcWindow.hide()
-    
-    # if "fine." is clicked from feelsWindow -> deadBabyWindow or ventWindow
-    # if ">__<" is clicked from feelsWindow -> storyWindow or playlistWindow
-    # if "drowning..." is clicked from feelsWindow -> copeWindow or valuesWindow
-    # if "dO i HaVe a PerSoNaLitY dIsORdEr?" is clicked from feelsWindow -> motMsgWindow or roastWindow
-    # if "*makin' moltovs*" is clicked from feelsWindow -> miniGameWindow or brutalDeathsWindow
-    if feelsWindow and window == feelsWindow and (event == sg.WINDOW_CLOSED or (event == "fine." or event ==">__<" or event == "drowning..." or event == "dO i HaVe a PerSoNaLitY dIsORdEr?" or event == "*makin' moltovs*")):
-        feelsWindow.close()
-        break
+songs_list

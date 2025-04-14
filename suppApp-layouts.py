@@ -1,6 +1,7 @@
 import PySimpleGUI as sg
 import time
 import random
+import webbrowser
 
 from app_dicts import welcGreetings
 from app_dicts import acknowlMsgs
@@ -237,6 +238,18 @@ def make_copingOpts_layout():
     ]]
 
 # make_guidedMed_layout not started: hard (links/gifs) + are you sure? popup
+    # link to breathing gif: https://media0.giphy.com/media/dDXZ3qU5nRBIe82Uit/200w.gif?cid=6c09b9526vuwa6mbrcee1tuj1gbqqw28il5qcp1b3dpb3oyb&ep=v1_gifs_search&rid=200w.gif&ct=g
+    # link to waterfall gif: https://i.makeagif.com/media/5-02-2018/8Ws2dD.gif
+    # link to fish gif: https://i.makeagif.com/media/8-22-2019/RGJJYc.gif
+    # link to calming swirl gif: https://images.squarespace-cdn.com/content/v1/581d54ccf5e231b25f89ed33/1568756642035-VX78WULS57OFDTDQB40J/Calming+Meditation+GIF+via+Worthy+Pause
+    # link to cat gif: https://pa1.aminoapps.com/6768/4f220411571310edfff962dffff29a45d4e62b3d_hq.gif
+    # link to orca gif: https://i.gifer.com/origin/64/64066a089d3076191d4e4366057dd0d4_w200.gif
+    # link to sunshower gif: https://i.pinimg.com/originals/bb/c7/2e/bbc72e8f200db31027894f80eb00e2ae.gif
+    # link to shore gif: https://i.pinimg.com/originals/d0/e2/a8/d0e2a8ae4195b8105ceb7477267367e1.gif 
+    # link to globes gif: https://anxietyunited.com/wp-content/uploads/2018/01/breathing.gif
+    # link to rainy day gif: https://i.pinimg.com/originals/b6/82/9c/b6829cb3569a724c620e8a100162c49b.gif
+    # environment scan dialogue: Take a moment to look around. Are you in danger? What do you notice? Focus on the present moment and what your senses tell you.
+    # body scan dialogue: Begin by focusing on your feet. Notice any sensations—warmth, tension, or relaxation. Slowly move your attention upward to your calves, knees, and thighs, observing each area without judgment until you reach the top of your head.
 
 # make_grounding_layout not started: mid + are you sure? popup
 
@@ -247,6 +260,95 @@ def make_copingOpts_layout():
 # make_train_layout not started: mid + are you sure? popup
 
 # make_game_layout not started: hard...what the mother-forker
+def launch_minesweeper():
+    width = 10
+    height = 8
+    total_bombs = 10
+    
+    font = 'Courier 14 bold'
+    size = (30, 30)
+    color = [('grey', 'grey'), ('#e0e0ff', '#3a194c'), ('black', 'green'), ('black', 'green'), ('black', '#3a194c')]
+    blank = ''
+    im = ['', blank, '', '', '']
+    bomb_layout = [[0 for _ in range(height)] for _ in range(width)]
+
+    def count_bombs(x, y):
+        if bomb_layout[x][y] == 10:
+            return 10
+        count = 0
+        for dx in [-1, 0, 1]:
+            for dy in [-1, 0, 1]:
+                if dx == 0 and dy == 0:
+                    continue
+                nx, ny = x + dx, y + dy
+                if 0 <= nx < width and 0 <= ny < height and bomb_layout[nx][ny] == 10:
+                    count += 1
+        return count
+
+    def deal():
+        bombs = random.sample(range(width * height), total_bombs)
+        for x in range(width):
+            for y in range(height):
+                bomb_layout[x][y] = 10 if x * height + y in bombs else 0
+        for x in range(width):
+            for y in range(height):
+                bomb_layout[x][y] = count_bombs(x, y)
+
+    def button(x, y):
+        return sg.Button(' ', size=(3, 1), key=(x, y), font=font, button_color=color[1], pad=(1, 1))
+
+    deal()
+    state = [[1 for _ in range(height)] for _ in range(width)]
+
+    layout = [[
+        sg.Button("Quit", key="-QUIT-", font=font)
+    ]] + [[
+        button(x, y) for x in range(width)
+    ] for y in range(height)]
+
+    win = sg.Window("Minesweeper", layout, finalize=True, modal=True)
+
+    while True:
+        revealed = sum(state[x][y] == 0 for x in range(width) for y in range(height))
+        event, _ = win.read()
+        if event == sg.WINDOW_CLOSED or event == "-QUIT-":
+            break
+        if isinstance(event, tuple):
+            x, y = event
+            if state[x][y] == 1:
+                light_purple = '#5c3a6d'
+                val = bomb_layout[x][y]
+                state[x][y] = 0
+                if val == 10:
+                    win[event].update(text='💣', button_color=('white', light_purple))
+                    again = sg.popup_yes_no("💀 Boom! You hit a bomb.\n\nWant to try again?", title="Game Over", font=('Courier', 14))
+                    if again == 'Yes':
+                        deal()
+                        for x in range(width):
+                            for y in range(height):
+                                state[x][y]
+                                win[(x, y)].update(text='', disabled=False, button_color=('white', '#2e183d'))
+                    else:
+                        break
+                elif val == 0:
+                    win[event].update(text=' ', button_color=('white', light_purple))
+                else:
+                    win[event].update(text=str(val), button_color=('white', light_purple))
+                win[event].update(disabled=True)
+        if revealed == width * height - total_bombs:
+            sg.popup("✨ You won! ✨", title="Victory!", font=('Courier', 14))
+            again = sg.popup_yes_no("💀 Boom! You hit a bomb.\n\nWanna try again?", title="Game Over", font=('Courier', 14))
+            if again == 'Yes':
+                deal()
+                for x in range(width):
+                    for y in range(height):
+                        state[x][y]
+                        win[(x, y)].update(text='', disabled=False, button_color=('white', '#2e183d'))
+            else:
+                break
+
+    win.close()
+
 
 def make_vent_layout():
     return[[
@@ -437,7 +539,6 @@ trainWindow = None #not started
 valuesWindow = None 
 motMsgsWindow = None 
 roastWindow = None 
-gameWindow = None #not started
 deathsWindow = None #not started
 
 blankWindow = None #testing screen needed to replace unmade follow-up screens
@@ -463,7 +564,6 @@ open_windows = [
     valuesWindow,
     motMsgsWindow,
     roastWindow,
-    gameWindow,
     deathsWindow,
     blankWindow]
 
@@ -497,7 +597,7 @@ while True:
     if feelsWindow and window == feelsWindow:
         if event in ("fine.", ">__<", "drowning...", "dO i HaVe a PerSoNaLitY dIsORdEr?", "*makin' moltovs*"):
             feelInput = event
-            acknowlWindow = sg.Window (f"{event}", make_acknowl_layout(), size=(500,400)).finalize()
+            acknowlWindow = sg.Window ("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_acknowl_layout(), size=(500,400)).finalize()
             feelsWindow.close()
 
     # trans to rand sel on next screen after "▶" is clicked from acknowlWindow
@@ -508,40 +608,40 @@ while True:
         if feelInput == "fine.":
             next_screen = random.choice(["fine1", "fine2"])
             if next_screen == "fine1":
-                deadBabWindow = sg.Window("fine1", make_deadBab_layout(prompt, punch), size=(500,400)).finalize()
+                deadBabWindow = sg.Window("•☽༻¨:·.────Dead Babies────.·:¨༺☾•", make_deadBab_layout(prompt, punch), size=(500,400)).finalize()
             else:
-                ventWindow = sg.Window("fine2", make_vent_layout(), size=(500,400)).finalize()
+                ventWindow = sg.Window("•☽༻¨:·.────Vent It Out────.·:¨༺☾•", make_vent_layout(), size=(500,400)).finalize()
                 
         elif feelInput == ">__<":
             next_screen = random.choice([">__<1", ">__<2"])
             if next_screen == ">__<1":
-                storyWindow = sg.Window(">__<1", make_story_layout(title, *lines), size=(900,400)).finalize()
+                storyWindow = sg.Window("•☽༻¨:·.────Story Time────.·:¨༺☾•", make_story_layout(title, *lines), size=(900,400)).finalize()
             else:
-                playlistWindow = sg.Window(">__<2", make_playlist_layout(), size=(500,400)).finalize()
+                playlistWindow = sg.Window("•☽༻¨:·.────Playlist Generator────.·:¨༺☾•", make_playlist_layout(), size=(500,400)).finalize()
                 
         elif feelInput == "drowning...":
             next_screen = random.choice(["drown1, drown2"])
             if next_screen == "drown1":
                 # placeholder for copingWindow
-                copingOptsWindow = sg.Window("drown1", make_blank_layout(), size=(500,400)).finalize()
+                copingOptsWindow = sg.Window("•☽༻¨:·.────Coping────.·:¨༺☾•", make_blank_layout(), size=(500,400)).finalize()
             else:
-                valuesWindow = sg.Window("drown2", make_values_layout(), size=(500,400)).finalize()
+                valuesWindow = sg.Window("•☽༻¨:·.────Value Reminders────.·:¨༺☾•", make_values_layout(), size=(500,400)).finalize()
                 
         elif feelInput == "dO i HaVe a PerSoNaLitY dIsORdEr?":
             next_screen = random.choice(["persDis1", "persDis2"])
             if next_screen == "persDis1":
-                motMsgsWindow = sg.Window("persDis1", make_motMsgs_layout(), size=(500,400)).finalize()
+                motMsgsWindow = sg.Window("•☽༻¨:·.────Motivation────.·:¨༺☾•", make_motMsgs_layout(), size=(500,400)).finalize()
             else:
-                roastWindow = sg.Window("persDis2", make_roast_layout(), size=(500,400)).finalize()
+                roastWindow = sg.Window("•☽༻¨:·.────Roast────.·:¨༺☾•", make_roast_layout(), size=(500,400)).finalize()
     
         else:
             next_screen = random.choice(["moltovs1", "moltovs2"])
             if next_screen == "moltovs1":
-                # placeholder for gameWindow
-                gameWindow = sg.Window("moltovs1", make_blank_layout(), size=(500,400)).finalize()
+                launch_minesweeper()
+                followUpWindow = sg.Window("•☽༻¨:·.────Mini Game────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
             else:
                 # placeholder for deathsWindow
-                deathsWindow = sg.Window("moltovs2", make_blank_layout(), size=(500,400)).finalize()
+                deathsWindow = sg.Window("•☽༻¨:·.────Kill────.·:¨༺☾•", make_blank_layout(), size=(500,400)).finalize()
     
     # logic for deadBabWindow
     if deadBabWindow and window == deadBabWindow:
@@ -629,7 +729,7 @@ while True:
             roastWindow.close()
             roastWindow = None 
     
-    # logic for gameWindow
+    # logic for gameWindow << needed???
     
     # logic for deathsWindow
     
@@ -638,17 +738,14 @@ while True:
     if window and event == "done":
         if copingOptsWindow:
             followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
-            copingOptsWindow.close()     
-        elif gameWindow:
-            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
-            gameWindow.close() 
+            copingOptsWindow.close()
         else:
             followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
             deathsWindow.close()
     
     # trans from followUpWindow to checkWindow
     if followUpWindow and window == followUpWindow and event == "continue":
-        checkWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_check_layout(), size=(500,400)).finalize()
+        checkWindow = sg.Window("•☽༻¨:·.────Checking In────.·:¨༺☾•", make_check_layout(), size=(500,400)).finalize()
         followUpWindow.close()
         followUpWindow = None
     
@@ -716,44 +813,45 @@ while True:
             elif copSel == "Vent (scream in the void)":
                 feels2Window.close()
                 feels2Window = None
-                ventWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_vent_layout(), size=(500,400)).finalize()
+                ventWindow = sg.Window("•☽༻¨:·.────Vent It Out────.·:¨༺☾•", make_vent_layout(), size=(500,400)).finalize()
                 
             elif copSel == "Storytime":
                 feels2Window.close()
                 feels2Window = None
-                storyWindow = sg.Window("story", make_story_layout(title, *lines), size=(900,400)).finalize()
+                storyWindow = sg.Window("•☽༻¨:·.────Story Time────.·:¨༺☾•", make_story_layout(title, *lines), size=(900,400)).finalize()
                 
             elif copSel == "Random Rage Playlist":
                 feels2Window.close()
                 feels2Window = None
-                playlistWindow = sg.Window("playlist", make_playlist_layout(), size=(500,400)).finalize()
+                playlistWindow = sg.Window("•☽༻¨:·.────Playlist Generator────.·:¨༺☾•", make_playlist_layout(), size=(500,400)).finalize()
                 
             elif copSel == "Coping Strategy Reminders":
                 feels2Window.close()
                 feels2Window = None
-                blankWindow = sg.Window("strategies", make_blank_layout(), size=(500,400)).finalize()
+                blankWindow = sg.Window("•☽༻¨:·.────Coping────.·:¨༺☾•", make_blank_layout(), size=(500,400)).finalize()
                 
             elif copSel == "Reminders of Your Value":
                 feels2Window.close()
                 feels2Window = None
-                valuesWindow = sg.Window("values", make_values_layout(), size=(500,400)).finalize()
+                valuesWindow = sg.Window("•☽༻¨:·.────Value Reminders────.·:¨༺☾•", make_values_layout(), size=(500,400)).finalize()
                 
             elif copSel == "Motivational Messaging":
                 feels2Window.close()
                 feels2Window = None
-                motMsgsWindow = sg.Window("motivation", make_motMsgs_layout(), size=(500,400)).finalize()
+                motMsgsWindow = sg.Window("•☽༻¨:·.────Motivation────.·:¨༺☾•", make_motMsgs_layout(), size=(500,400)).finalize()
             
             elif copSel == "Roast Me":
                 feels2Window.close()
                 feels2Window = None
-                roastWindow = sg.Window("roast", make_roast_layout(), size=(500,400)).finalize()
+                roastWindow = sg.Window("•☽༻¨:·.────Roast────.·:¨༺☾•", make_roast_layout(), size=(500,400)).finalize()
                 
             elif copSel == "Mini Game":
                 feels2Window.close()
                 feels2Window = None
-                blankWindow = sg.Window("game", make_blank_layout(), size=(500,400)).finalize()
+                launch_minesweeper()
+                followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
                 
             elif copSel == "Imagine the Brutal Deaths of my Enemies":
                 feels2Window.close()
                 feels2Window = None
-                blankWindow = sg.Window("deaths", make_blank_layout(), size=(500,400)).finalize()
+                blankWindow = sg.Window("•☽༻¨:·.────Kill────.·:¨༺☾•", make_blank_layout(), size=(500,400)).finalize()

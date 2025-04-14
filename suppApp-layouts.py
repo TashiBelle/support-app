@@ -152,11 +152,64 @@ def make_feels2_layout():
         )
     ]]
 
-# make_deadBab_layout() not started: mid -- rand msg, click to reveal, refresh button ("Another?"), done button
-    # deadBabJokes dict
+def choose_joke():
+    joke = random.choice(list(deadBabJokes.values()))
+    return joke["prompt"], joke["punch"]
+
+def make_deadBab_layout(prompt, punch):
+    return[[
+        sg.Column(
+            [
+                [sg.Text(" ", size=(1,3))],
+                [sg.Text(
+                    prompt, 
+                    key='joke_prompt', 
+                    font=('Courier', 14), 
+                    size=(50,2), 
+                    justification='center')],
+                [sg.Text(
+                    '', 
+                    key='joke_punch',
+                    font=('Courier', 14),
+                    size=(50,2),
+                    justification='center')],
+                [sg.Text(" ", size=(1,1))],
+                [sg.Button("tell me", size=(20,1), font=('Courier', 12))],
+                [sg.Text(" ", size=(1,1))],
+                [sg.Button("Another?", size=(15,1), font=('Courier', 12)),
+                 sg.Text("          ", size=(1,1)),
+                 sg.Button("Done", size=(15,1), font=('Courier', 12))]
+            ],
+            justification='center',
+            element_justification='center',
+            vertical_alignment='center',
+            expand_x=True,
+            expand_y=True
+        )
+    ]]
     
-# make_story_layout() not started: mid -- click to reveal, scrollbar, done button
-    # storiesList dict
+def choose_story():
+    story = random.choice(list(storiesList.values()))
+    return [story["title"]] + [story[f"line{i}"] for i in range(1,11)]
+
+def make_story_layout(title, *lines):
+    layout = [
+        [sg.Text(title, key='story_title', font=('Courier', 20), size=(70, 2), justification='center')]
+    ]
+
+    for i in range(1, 11):
+        layout.append([sg.Text('', key=str(i), font=('Courier', 12), size=(1500, 1), justification='left')])
+
+    layout += [
+        [sg.Text(" ", size=(1, 2))],
+        [sg.Button("Next", key="Next", size=(15, 1), font=('Courier', 12)),
+         sg.Text(" " * 10),
+         sg.Button("Done", key="Done", visible=False, size=(15, 1), font=('Courier', 12))]
+    ]
+    
+    return[[
+        sg.Column(layout,justification='center', element_justification='center', expand_x=True, expand_y=True)
+    ]]
     
 # make_copingOpts_layout -- ask if they need another coping rem (loop back to copingOptsWindow), done button
 def make_copingOpts_layout():
@@ -231,15 +284,105 @@ def make_vent_layout():
 
 # make_deathsPop_layout not started >> ?????????
 
-# make_playlist_layout not started: mid -- rand5, refresh button ("Another?"), done button
-    # playlistNames dict
-    # songList dict
+def generate_playlist():
+    return "\n".join(random.sample(songsList,5))
 
-# make_values_layout not started: easy -- rand msg, refresh button ("Another?"), done button
-    # valuesList dict
+def gen_playlist_title():
+    playlist_title = random.choice(playlistNames)
+    return playlist_title
 
-# make_roast_layout not started: mid -- rand msg, click to reveal, refresh button ("Another?"), done button
-    # roastList dict
+def make_playlist_layout():
+    playlist_title = random.choice(playlistNames)
+    return[[
+        sg.Column(
+            [
+                [sg.Text(" ", size=(1,1))],
+                [sg.Text(
+                    gen_playlist_title(),
+                    key='playlist_title',
+                    justification='center',
+                    font=('Courier', 18, 'bold'),
+                    size=(50, 1),
+                    pad=(0, 10)
+                )],
+                [sg.Text(
+                    generate_playlist(),
+                    key='songs',
+                    justification='left',
+                    font=('Courier', 14),
+                    size=(50,10),
+                    auto_size_text=False,
+                    pad=(0,10)
+                )],
+                [sg.Button("Another?", size=(15,1), font=('Courier', 12)),
+                sg.Text("          ", justification='center', font=('Courier', 12)),
+                sg.Button("Done", size=(15,1), font=('Courier', 12))]
+                ],
+            justification='center',
+            element_justification='center',
+            vertical_alignment='center',
+            expand_x=True,
+            expand_y=True
+        )
+    ]]
+
+def make_values_layout():
+    rand_val = random.choice(valuesList)
+    return[[
+        sg.Column(
+            [
+                [sg.Text(" ", size=(1,4))],
+                [sg.Text(
+                    f"{rand_val}",
+                    key='val_msg',
+                    justification='center',
+                    font=('Courier', 18),
+                    size=(35,4),
+                    auto_size_text=False,
+                    pad=(0,10)
+                )],
+                [sg.Text(" ", size=(1,1))],
+                [sg.Text(" ", justification='center', font=('Courier', 20))],
+                [sg.Button("Another?", size=(15,1), font=('Courier', 12)),
+                 sg.Text("          ", justification='center', font=('Courier', 12)),
+                 sg.Button("Done", size=(15,1), font=('Courier', 12))]
+            ],
+            justification='center',
+            element_justification='center',
+            vertical_alignment='center',
+            expand_x=True,
+            expand_y=True
+        )
+    ]]
+
+def make_roast_layout():
+    rand_roast = random.choice(roastList)
+    return[[
+        sg.Column(
+            [
+                [sg.Text(" ", size=(1,4))],
+                [sg.Text(
+                    f"{rand_roast}",
+                    key='rand_roast',
+                    justification='center',
+                    font=('Courier', 18),
+                    size=(35,4),
+                    auto_size_text=False,
+                    pad=(0,10)
+                )],
+                [sg.Text(" ", size=(1,1))],
+                [sg.Text(" ", justification='center', font=('Courier', 20))],
+                [sg.Button("Another?", size=(15,1), font=('Courier', 12)),
+                 sg.Text("          ", justification='center', font=('Courier', 12)),
+                 sg.Button("Done", size=(15,1), font=('Courier', 12))]
+            ],
+            justification='center',
+            element_justification='center',
+            vertical_alignment='center',
+            expand_x=True,
+            expand_y=True
+        )
+    ]]
 
 def make_motMsgs_layout():
     rand_motMsg = random.choice(motMsgs)
@@ -273,7 +416,6 @@ def make_motMsgs_layout():
 # make_monModChart_layout not started >> ????????
 
 
-
 # windows bank
 welcWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_welc_layout(), size=(500,400)).finalize()
 testWindow = None
@@ -282,21 +424,21 @@ feelsWindow = None
 checkWindow = None
 feels2Window = None
 followUpWindow = None
-deadBabWindow = None #no layout made
+deadBabWindow = None 
 ventWindow = None 
-storyWindow = None #no layout made
-playlistWindow = None #no layout made
-copingOptsWindow = None #no layout made
+storyWindow = None 
+playlistWindow = None 
+copingOptsWindow = None #inprog
 guidedMedWindow = None #not started
 groundingWindow = None #not started
 tippWindow = None #not started
 monModWindow = None #not started
 trainWindow = None #not started
-valuesWindow = None #no layout made
+valuesWindow = None 
 motMsgsWindow = None 
-roastWindow = None #no layout made
-gameWindow = None #no layout made
-deathsWindow = None #no layout made
+roastWindow = None 
+gameWindow = None #not started
+deathsWindow = None #not started
 
 blankWindow = None #testing screen needed to replace unmade follow-up screens
 
@@ -328,6 +470,9 @@ open_windows = [
 # give the GUI a breather
 time.sleep(0.1)
 
+prompt, punch = choose_joke()
+title, *lines = choose_story()
+story_counter = 1
 
 while True:
     try:
@@ -363,19 +508,16 @@ while True:
         if feelInput == "fine.":
             next_screen = random.choice(["fine1", "fine2"])
             if next_screen == "fine1":
-                # placeholder for deadBabWindow
-                deadBabWindow = sg.Window("fine1", make_blank_layout(), size=(500,400)).finalize()
+                deadBabWindow = sg.Window("fine1", make_deadBab_layout(prompt, punch), size=(500,400)).finalize()
             else:
                 ventWindow = sg.Window("fine2", make_vent_layout(), size=(500,400)).finalize()
                 
         elif feelInput == ">__<":
             next_screen = random.choice([">__<1", ">__<2"])
             if next_screen == ">__<1":
-                # placeholder for storyWindow
-                storyWindow = sg.Window(">__<1", make_blank_layout(), size=(500,400)).finalize()
+                storyWindow = sg.Window(">__<1", make_story_layout(title, *lines), size=(900,400)).finalize()
             else:
-                # placeholder for playlistWindow
-                playlistWindow = sg.Window(">__<2", make_blank_layout(), size=(500,400)).finalize()
+                playlistWindow = sg.Window(">__<2", make_playlist_layout(), size=(500,400)).finalize()
                 
         elif feelInput == "drowning...":
             next_screen = random.choice(["drown1, drown2"])
@@ -383,16 +525,14 @@ while True:
                 # placeholder for copingWindow
                 copingOptsWindow = sg.Window("drown1", make_blank_layout(), size=(500,400)).finalize()
             else:
-                # placeholder for valuesWindow
-                valuesWindow = sg.Window("drown2", make_blank_layout(), size=(500,400)).finalize()
+                valuesWindow = sg.Window("drown2", make_values_layout(), size=(500,400)).finalize()
                 
         elif feelInput == "dO i HaVe a PerSoNaLitY dIsORdEr?":
             next_screen = random.choice(["persDis1", "persDis2"])
             if next_screen == "persDis1":
                 motMsgsWindow = sg.Window("persDis1", make_motMsgs_layout(), size=(500,400)).finalize()
             else:
-                # placeholder for roastWindow
-                roastWindow = sg.Window("persDis2", make_blank_layout(), size=(500,400)).finalize()
+                roastWindow = sg.Window("persDis2", make_roast_layout(), size=(500,400)).finalize()
     
         else:
             next_screen = random.choice(["moltovs1", "moltovs2"])
@@ -404,6 +544,17 @@ while True:
                 deathsWindow = sg.Window("moltovs2", make_blank_layout(), size=(500,400)).finalize()
     
     # logic for deadBabWindow
+    if deadBabWindow and window == deadBabWindow:
+        if event == "tell me":
+            deadBabWindow['joke_punch'].update(punch)
+        if event == "Another?":
+            prompt, punch = choose_joke()
+            deadBabWindow['joke_prompt'].update(prompt)
+            deadBabWindow['joke_punch'].update('')
+        if event == "Done":
+            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
+            deadBabWindow.close()
+            deadBabWindow = None 
     
     # logic for ventWindow
     if ventWindow and window == ventWindow:
@@ -420,12 +571,43 @@ while True:
             pass
         
     # logic for storyWindow
+    if storyWindow and window == storyWindow:
+        if event == "Next":
+            if story_counter <= len(lines):
+                storyWindow[str(story_counter)].update(lines[story_counter - 1])
+                story_counter += 1
+                if story_counter > len(lines):
+                    storyWindow["Done"].update(visible=True)
+                    storyWindow["Next"].update(visible=False)
+   
+        elif event == "Done":
+            story_counter = 1
+            title, *lines = choose_story()
+            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
+            storyWindow.close()
+            storylistWindow = None 
     
     # logic for playlistWindow
+    if playlistWindow and window == playlistWindow:
+        if event == "Another?":
+            window['playlist_title'].update(gen_playlist_title())
+            window['songs'].update(generate_playlist())
+        elif event == "Done":
+            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
+            playlistWindow.close()
+            playlistWindow = None 
     
     # logic for copingWindow
     
     # logic for valuesWindow
+    if valuesWindow and window == valuesWindow:
+        if event == "Another?":
+            new_val = random.choice(valuesList)
+            window['val_msg'].update(new_val)
+        elif event == "Done":
+            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
+            valuesWindow.close()
+            valuesWindow = None 
     
     # logic for motMsgsWindow
     if motMsgsWindow and window == motMsgsWindow:
@@ -438,6 +620,14 @@ while True:
             motMsgsWindow = None 
     
     # logic for roastWindow
+    if roastWindow and window == roastWindow:
+        if event == "Another?":
+            new_roast = random.choice(roastList)
+            window['rand_roast'].update(new_roast)
+        elif event == "Done":
+            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
+            roastWindow.close()
+            roastWindow = None 
     
     # logic for gameWindow
     
@@ -446,25 +636,9 @@ while True:
 
     # placeholder windows and "done" buttons for all activities during testing main screens
     if window and event == "done":
-        if deadBabWindow:
+        if copingOptsWindow:
             followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
-            deadBabWindow.close()
-        elif storyWindow:
-            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
-            storyWindow.close()
-        elif playlistWindow:
-            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
-            playlistWindow.close()
-        elif copingOptsWindow:
-            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
-            copingOptsWindow.close() 
-        elif valuesWindow:
-            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
-            valuesWindow.close() 
-            
-        elif roastWindow:
-            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
-            roastWindow.close() 
+            copingOptsWindow.close()     
         elif gameWindow:
             followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(), size=(500,400)).finalize()
             gameWindow.close() 
@@ -537,7 +711,7 @@ while True:
             if copSel == "Dead Baby Jokes":
                 feels2Window.close()
                 feels2Window = None
-                blankWindow = sg.Window("dead babies", make_blank_layout(), size=(500,400)).finalize()
+                deadBabWindow = sg.Window("dead babies", make_deadBab_layout(prompt, punch), size=(500,400)).finalize()
                 
             elif copSel == "Vent (scream in the void)":
                 feels2Window.close()
@@ -547,12 +721,12 @@ while True:
             elif copSel == "Storytime":
                 feels2Window.close()
                 feels2Window = None
-                blankWindow = sg.Window("story", make_blank_layout(), size=(500,400)).finalize()
+                storyWindow = sg.Window("story", make_story_layout(title, *lines), size=(900,400)).finalize()
                 
             elif copSel == "Random Rage Playlist":
                 feels2Window.close()
                 feels2Window = None
-                blankWindow = sg.Window("playlist", make_blank_layout(), size=(500,400)).finalize()
+                playlistWindow = sg.Window("playlist", make_playlist_layout(), size=(500,400)).finalize()
                 
             elif copSel == "Coping Strategy Reminders":
                 feels2Window.close()
@@ -562,7 +736,7 @@ while True:
             elif copSel == "Reminders of Your Value":
                 feels2Window.close()
                 feels2Window = None
-                blankWindow = sg.Window("values", make_blank_layout(), size=(500,400)).finalize()
+                valuesWindow = sg.Window("values", make_values_layout(), size=(500,400)).finalize()
                 
             elif copSel == "Motivational Messaging":
                 feels2Window.close()
@@ -572,7 +746,7 @@ while True:
             elif copSel == "Roast Me":
                 feels2Window.close()
                 feels2Window = None
-                blankWindow = sg.Window("roast", make_blank_layout(), size=(500,400)).finalize()
+                roastWindow = sg.Window("roast", make_roast_layout(), size=(500,400)).finalize()
                 
             elif copSel == "Mini Game":
                 feels2Window.close()

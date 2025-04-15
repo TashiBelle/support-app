@@ -8,29 +8,29 @@ welcGreetings = [
     "How ya doin'?",
     "How's it hangin'?",
     "How are you today?",
-    "What is... *gestures to your entire being* ..…this?",
+    "What is ... *gestures to your entire being* ... this?",
     "How are you feeling?",
-    "Is this crisis, denial, or aggressively 'fine'?",
+    "Is this crisis, denial, or are you aggressively 'fine'?",
     "Hey there, are we just 'fine' or are we burning it all down?",
     "What flavor of meltdown are we cooking with today?",
     "Welcome. I assume feelings developed against your will?",
-    "Don't you worry, I have no memory or external connections. Go on, tell me how you're really feeling."
+    "Don't worry, I have no memory or external connections. \nGo on, tell me how you're really feeling."
 ]
 
 # acknowlMsgs for make_acknowl_Layout / acknowlWindow 
 acknowlMsgs = [
-    "Oof :/  Time for some support.",
-    "Looks like you're screwed. KIDDING! Let's get you some support.",
+    "Oof :/  \nTime for some support.",
+    "Looks like you're screwed. \nKIDDING! Let's get you some support.",
     "That's rough, buddy.",
     "Everyone gets that way sometimes. Thas otay. Maybe this will help.",
-    "Oh nos! Quick, try this...",
-    "That blows. This will help (I know because my therapist told me so).",
+    "Oh nos! Quick, try this ...",
+    "That blows. This will help. \nI know because my therapist told me so.",
     "Yeesh. Time to put the 'cope' in 'OH MY GODS EVERYTHING IS ON FIRE'.",
-    "I'd offer you a hug, but I'm a digital construct. Maybe this will help.",
-    "Aw :(  Here, try this! Or don't. I'll just be here waiting.",
-    "Lame :P  This would be the part where an NPC gives you a side quest.",
+    "I'd offer you a hug, but I'm a digital construct. \nMaybe this will help?",
+    "Aw :(  Here, try this! \nOr don't. I'll just be here waiting.",
+    "Lame :P  \nThis would be the part where an NPC gives you a side quest.",
     "Woof. Triage time.",
-    "Rada rada rada. Um...mebbe this helps?"
+    "Rada rada rada. \nUm ... mebbe this helps?"
 ]
 
 # checkinMsgs for make_check_layout / checkWindow (y/n only)
@@ -38,12 +38,12 @@ checkinMsgs = [
     "Feeling any better?",
     "Did that help even just a little tiny bit?",
     "Checking-in! Feel better?",
-    "<status report requested>; enter 'y' for net positive, otherwise enter 'n'",
+    "<status report requested>; \nenter 'y' for net positive, otherwise enter 'n'",
     "Sooo, are we alive and slightly less fucked?",
     "Ready to stop being a sad soggy burrito now?",
     "Did it help, or are we still riding the emotional rollercoaster with no seatbelt?",
     "Enter 'y' if you good, enter 'n' for more support.",
-    "Find a paddle? Still riding shit creek? 'Y' to end, 'N' to continue.",
+    "Find a paddle to help you out of that shit creek? \n'Y' to end, 'N' to continue.",
     "'Y' if you've returned to the land of the semi-ok, otherwise click 'N'."
 ]
 
@@ -53,7 +53,7 @@ checkinMsgs = [
 deadBabJokes={
     1: {
         "prompt": "What's difference between a dead baby and a fish?",
-        "punch": "You haven't flushed a fish down the toilet…..yet."
+        "punch": "You haven't flushed a fish down the toilet ... yet."
     },
     2: {
         "prompt": "What's better than a dead baby stapled to a tree?",
@@ -112,12 +112,12 @@ storiesList = {
         "title": "Boot Metamorphasis",
         "line1": "'Wh-where am I?'",
         "line2": "The boot, now endowed with sentience, surveyed the room.",
-        "line3": "His partner (the other boot) sat perfectly in line next to him…..",
-        "line4": "…..a folded uniform was placed just so atop the freshly made bed…..",
-        "line5": "…..and a framed photo of Nicholas Cage teetered on the edge of the nightstand.",
+        "line3": "His partner (the other boot) sat perfectly in line next to him ...",
+        "line4": "... a folded uniform was placed just so atop the freshly made bed ...",
+        "line5": "... and a framed photo of Nicholas Cage teetered on the edge of the nightstand.",
         "line6": "The boot then realized that he could also hear, feel, taste, reason, and emote.",
-        "line7": "But worst of all…..",
-        "line8": "..…he could smell.",
+        "line7": "But worst of all ...",
+        "line8": "... he could smell.",
         "line9": "The strong odor wafting from inside him was too much to bear. ",
         "line10": "He promptly shuffled his way down the hall and filed for worker's comp."
     },
@@ -125,21 +125,21 @@ storiesList = {
         "title": "Foreclosure",
         "line1": "I once met a Gen-X'er (a la 1984…..you know the ones) who just couldn't keep up with the mortgage.",
         "line2": "She didn't have fancy degrees or combat training or the kind of resilience you have.",
-        "line3": "She did have one special skill, though…..",
+        "line3": "She did have one special skill, though ...",
         "line4": "The power of the Latch-Key Kid ™.",
         "line5": "Abilities include: runnin', lock-pickin', and buildin' sand castles.",
         "line6": "Weaknesses include: paying bills, emotional regulation, and maintaining a grip on reality.",
-        "line7": "Eventually, she declared banruptcy and lost her house…..",
-        "line8": "…..so she built a huge sand castle with a pillow fort in every room.",
-        "line9": "But…..you know how these things go…..",
+        "line7": "Eventually, she declared banruptcy and lost her house ...",
+        "line8": "... so she built a huge sand castle with a pillow fort in every room.",
+        "line9": "But ... you know how these things go ...",
         "line10": "She discovered that the sand castle was built atop a hellmouth, and it was soon foreclosed."
     },
     4: {
         "title": "Calcifer Documentation",
         "line1": "Client Name: Calcifer",
         "line2": "Presenting Problem: Client reports being 'trapped in a bargain with a mediocre wizard'.",
-        "line3": "Appearance: Aggressively sentient fireball-- conveys emotions via flaring /simmering…..",
-        "line4": "…..pointedly Left soot on the couch.",
+        "line3": "Appearance: Aggressively sentient fireball-- conveys emotions via flaring /simmering ...",
+        "line4": "... pointedly Left soot on the couch.",
         "line5": "Affect: Labile. Cycles between smug, panicked, and flirty.",
         "line6": "Preliminary Dx: Rule out Flame-Related Delusional Disorder (F-RDD), Complex Fire Trauma, and Magical Codependency.",
         "line7": "Treatment Plan: Narrative therapy to untangle contract-based trauma. Reduce bacon intake as coping strategy.",
@@ -169,7 +169,7 @@ playlistNames = [
 ]
 
 # songList for make_playlist_layout in playlistWindow
-songList = [
+songsList = [
     "'Jekyll and Hyde' - Five Finger Death Punch",
     "'Under and Over' - Five Finger Death Punch",
     "'Duality' - Slipknot",
@@ -274,21 +274,21 @@ songList = [
 
 # valuesList for make_values_layout in valuesWindow
 valuesList = [
-    "You is kind. You is smart. You is important. You is gonna fuck this shit up.",
-    "You are allowed to be tired. Your strength still shines through.",
+    "You is kind. You is smart. You is important. \nYou is gonna fuck this shit up.",
+    "You are allowed to be tired. \nYour strength still shines through.",
     "You are more than enough.",
-    "It may not be about you. But that doesn't mean you're not important.",
+    "It may not be about you. \nBut that doesn't mean you're not important.",
     "You're still you, even when you're quiet, messy, or hurting.",
-    "You don't need to be useful to be cared for. But you are useful. Like, absurdly so.",
+    "You don't need to be useful to be cared for. \nBut you are useful. Like, absurdly so.",
     "You carry heavy shit so well that people forget how much it must weigh. But you do it with flair, and it's ok to put some of it down.",
     "There are people that find comfort in your presence, even if you don't say or do anything.",
-    "You're not broken and you don't have a personality disorder. You're just operating on a level that most people can't comprehend.",
-    "Look at you winning. You're still here, asking for support, and killing it. Slay. Slaughter, if you must.",
+    "You're not broken and you don't have a personality disorder. \nYou're just operating on a level that most people can't comprehend.",
+    "Look at you winning. You're still here, asking for support, and killing it. \nSlay. Slaughter, if you must.",
     "You make other people feel brave, even if you don't feel brave sometimes.",
-    "You've literally saved people's lives. The world is better for having you in it.",
+    "You've literally saved peoples' lives. The world is better for having you in it.",
     "You don't owe anyone anything today, or any other day. You just gotta breathe. That's enough.",
     "You're not lost, you're just charting a map in seas that most people aren't strong enough to fare.",
-    "Did you remember that you always show up when people need you? You're worth showing up for yourself, too."
+    "Did you remember that you always show up when people need you? \nYou're worth showing up for yourself, too."
 ]
 
 # roastList for make_roast_layout in roastWindow
@@ -297,15 +297,15 @@ roastList = [
     "You said 'I’m fine' with the exact tone of a woman who hasn’t slept since the Bush administration.",
     "You give off 'I’d rather die than accept help' energy.",
     "Sit down with that Gryffindor-Martyr-Soldier-Hero energy. Too much, ma'am.",
-    "You’ve got the tactical awareness of a squad leader and the emotional boundaries of a feral cat.",
-    "You’re not 'resilient', you’re just chronically allergic to rest.",
-    "You don’t need a vacation. You need to be tranquilized and left in a cottage for a month.",
+    "You’ve got the tactical awareness and emotional boundaries of a feral cat.",
+    "YAre you resilient, or are you just chronically allergic to rest?",
+    "You don’t need a vacation. \nYou need to be tranquilized and left in a cottage for a month.",
     "Is it regulation? Or professional dissociation?",
-    "You’re like if Gryffindor and burnout had a baby and raised it on sarcasm.",
-    "Is this coping or out-stubborning your symptoms again?",
+    "You’re like if Gryffindor and the Energizer Bunny had a baby and raised it on sarcasm.",
+    "Is this called coping or out-stubborning your symptoms?",
     "You have the vibe of someone who’d file a report on their own meltdown.",
-    "You got that Gen-X brand of 'if I ignore it long enough, maybe it dies'. No. Your emotions are not a baby. You can't kill them like that.",
-    "You out here buyin tickets to trauma-fun-land like it’s a theme park. Fair warning, you are too tall to ride.",
+    "You got that Gen-X brand of 'if I ignore it long enough, maybe it dies'. \nNo. Your emotions are not a baby. You can't kill them like that.",
+    "You out here buyin tickets to trauma-fun-land like it’s a theme park. \nFair warning: you are, in fact, too tall to ride.",
     "You give advice like you’re a wizard and receive it like a brick wall in a flak jacket.",
     "You seem like the type who'd rather explain neurobiology for 40 minutes than admit you’re upset.",
     "You wouldn’t know peace if it punched you in the face and said 'stand down'.",
@@ -314,26 +314,27 @@ roastList = [
 
 # motMsgs for make_motMsgs_layout in motMsgsWindow
 motMsgs = [
-    "You’ve been through worse and laughed the entire time. It's all going to be ok.",
-    "All this pressure just be makin you shine brighter. Is 'suck it up, buttercup' too harsh?",
-    "You've already proven your strength. You got this.",
-    "You’ve got battlefield energy. Even your panic looks like leadership.",
-    "Feelings aren’t failure. Even Pisces get to be pissed off and powerful.",
-    "This is just another mission. Breathe. Assess. Adapt. You always do.",
-    "You’ve survived every worst-case scenario your brain could throw at you. This one’s no different.",
-    "Even Gryffindors need to sit the fuck down sometimes. That doesn’t make you weak. That makes you human.",
+    "You’ve been through worse and laughed the entire time. \nIt's all going to be ok.",
+    "All this pressure just be makin you shine brighter. \nIs 'suck it up, buttercup' too harsh?",
+    "You've already proven your strength. \nYou got this.",
+    "You’ve got battlefield energy. \nEven your panic looks like leadership.",
+    "Feelings aren’t failure. \nEven Pisces get to be pissed off and powerful.",
+    "This is just another day. \nBreathe. Assess. Adapt. You always do.",
+    "You’ve survived every worst-case scenario your brain could throw at you. \nThis one’s no different.",
+    "Even Gryffindors need to sit the fuck down sometimes. \nThat doesn’t make you weak. That makes you human.",
     "You’re allowed to fall apart—just do it like you always do: with flair and a comeback plan.",
-    "You’re not spiraling—you’re strategizing loudly. Keep going.",
+    "You’re not spiraling—you’re strategizing loudly. \nKeep going.",
     "You don’t have to be calm. You just have to keep showing up (which you’re crushing, btw).",
-    "You weren’t built to break. You were built to bend, snap back, and punch the problem in the face.",
+    "You weren’t built to break. \nYou were built to bend, snap back, and punch the problem in the face.",
     "You could be mid-breakdown and still be the most competent person in the room."
 ]
 
-# followUpMsgs for make_followup_layout in followUpWindow
+# !!!followUpMsgs for make_followup_layout in followUpWindow
 followUpMsgs = [
     "Look at you doing the thing!",
     "Way to go, you!",
     "Daayyyuuummmm, good job!",
-    "You're doing good!"
+    "You're doing good!",
+    "You're crushin' it."
 ]
     

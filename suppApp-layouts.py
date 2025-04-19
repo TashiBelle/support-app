@@ -14,6 +14,7 @@ from app_dicts import valuesList
 from app_dicts import roastList
 from app_dicts import motMsgs
 from app_dicts import followUpMsgs
+from app_dicts import madlibs_stories
 
 sg.theme('DarkPurple1')
 
@@ -21,6 +22,10 @@ sg.theme('DarkPurple1')
 # empty variables for later
 feelInput = None #records input from feelsLayout emotion
 checkInput = None #decides whether to go back to welc or go to feels2
+chosen_weapon = None
+madlibs_inputs = []
+madlibs_blanks = []
+madlibs_story_template = []
 
 
 # layout functions
@@ -535,10 +540,7 @@ def launch_minesweeper():
     total_bombs = 10
     
     font = 'Courier 14 bold'
-    size = (30, 30)
-    color = [('grey', 'grey'), ('#e0e0ff', '#3a194c'), ('black', 'green'), ('black', 'green'), ('black', '#3a194c')]
-    blank = ''
-    im = ['', blank, '', '', '']
+    color = [('grey', 'grey'), ('#e0e0ff', '#3a194c'), ('black', 'green'), ('black', 'green'), ('white', '#3a194c')]
     bomb_layout = [[0 for _ in range(height)] for _ in range(width)]
 
     def count_bombs(x, y):
@@ -561,7 +563,8 @@ def launch_minesweeper():
                 bomb_layout[x][y] = 10 if x * height + y in bombs else 0
         for x in range(width):
             for y in range(height):
-                bomb_layout[x][y] = count_bombs(x, y)
+                if bomb_layout[x][y] != 10:
+                    bomb_layout[x][y] = count_bombs(x, y)
 
     def button(x, y):
         return sg.Button(' ', size=(3, 1), key=(x, y), font=font, button_color=color[1], pad=(1, 1))
@@ -576,57 +579,44 @@ def launch_minesweeper():
                 for x in range(width):
                     for y in range(height):
                         state[x][y] = 1
-                        win[(x, y)].update(text='', disabled=False, button_color=('white', '#2e183d'))
+                        window[(x, y)].update(text='', disabled=False, button_color=color[1])
             else:
-                win.close()
                 return True
         return False
 
     deal()
     state = [[1 for _ in range(height)] for _ in range(width)]
 
-    layout = [[
-        sg.Button("Quit", key="-QUIT-", font=font)
-    ]] + [[
-        button(x, y) for x in range(width)
-    ] for y in range(height)]
+    layout = [[sg.Button("Quit", key="-QUIT-", font=font)]] + [
+        [button(x, y) for x in range(width)] for y in range(height)
+    ]
 
-    win = sg.Window("Minesweeper", layout, finalize=True, modal=True)
+    window = sg.Window("Minesweeper", layout, finalize=True, modal=True)
 
     while True:
-        event, _ = win.read()
+        event, values = window.read()
         if event == sg.WINDOW_CLOSED or event == "-QUIT-":
             break
         if isinstance(event, tuple):
             x, y = event
-            if state[x][y] == 1:
-                light_purple = '#5c3a6d'
-                val = bomb_layout[x][y]
+            if bomb_layout[x][y] == 10:
+                window[(x, y)].update('💣', button_color=('white', 'red'))
+                again_result = sg.popup_yes_no("💥 Game Over!\n Wanna try again?", title="Boom", font=font)
+                if again_result == 'Yes':
+                    for x in range(width):
+                        for y in range(height):
+                            state[x][y] = 1
+                            window[(x,y )].update(text='', disabled=False, button_color=color[1])
+                elif again_result == 'No':
+                    break
+            else:
+                num = bomb_layout[x][y]
+                window[(x, y)].update('' if num == 0 else str(num), disabled=True, button_color=('white', '#d6b4fc'))
                 state[x][y] = 0
-                if val == 10:
-                    win[event].update(text='💣', button_color=('white', light_purple))
-                    again = sg.popup_yes_no("💀 Boom! You hit a bomb.\n\nWant to try again?", title="Game Over", font=('Courier', 14))
-                    if again == 'Yes':
-                        deal()
-                        for x in range(width):
-                            for y in range(height):
-                                state[x][y] = 1
-                                win[(x, y)].update(text='', disabled=False, button_color=('white', '#2e183d'))
-                        continue  # restart loop after resetting
-                    else:
-                        break
-                else:
-                    # Safe square
-                    win[event].update(
-                        text=' ' if val == 0 else str(val),
-                        button_color=('white', light_purple),
-                        disabled=True
-                    )
-                    if check_win():
-                        break  # game ends after win check
+                if check_win():
+                    break
 
-
-    win.close()
+    window.close()
 
 def make_vent_layout():
     return[[
@@ -661,8 +651,97 @@ def make_vent_layout():
     ]]
 
 # make_deaths_layout not started: hard + are you sure? popup
+def brutal_death_spinner():
+    weapons = list(madlibs_stories.keys())
+    font = ('Courier', 14)
 
-# make_deathsPop_layout not started >> ?????????
+    layout = [
+        [sg.Column(
+            [
+                [sg.Text("Choose Your Weapon" , font=('Courier', 20), justification='center', expand_x=True)],
+                [sg.Text('', size=(1,1))],
+                [sg.Text("", size=(20,1), key='-SPIN-', font=font)],
+                [sg.Text('', size=(1,1))],
+                [sg.Button("Spin", key="-SPIN_BTN-", font=font)]
+            ],
+            justification='center',
+            element_justification='center',
+            vertical_alignment='center',
+            expand_x=True,
+            expand_y=True
+        )
+    ]]
+
+    window = sg.Window("•☽༻¨:·.────Wheel of Justice────.·:¨༺☾•", layout, size=(400,200), modal=True, finalize=True)
+
+    selected_weapon = None
+
+    while True:
+        event, _ = window.read()
+        if event in (sg.WINDOW_CLOSED, "Exit"):
+            break
+
+        if event == "-SPIN_BTN-":
+            for i in range(25):  # number of fake "spins"
+                weapon = random.choice(weapons)
+                window['-SPIN-'].update(weapon)
+                window.refresh()
+                time.sleep(0.05 + (i / 100))  # slows down over time
+            selected_weapon = weapon
+            sg.popup(f"Your weapon of vengeance is: {selected_weapon}", font=font)
+            break
+
+    window.close()
+    return selected_weapon
+
+def make_madlibs_input(blanks):
+    return [[sg.Text(f"{i+1}. {blank}"), sg.Input(key=f"-IN{i}-")] for i, blank in enumerate(blanks)] + [[sg.Button("Submit")]]
+
+def make_madlibs_output_layout(story):
+    return [[sg.Text(line, size=(60, 2))] for line in story] + [[sg.Button("Close")]]
+
+def format_madlibs_story(template, inputs):
+    return [line.format(*inputs) for line in template]
+
+def run_madlibs():
+    chosen_weapon = brutal_death_spinner()
+    if not chosen_weapon:
+        return
+
+    blanks = madlibs_stories[chosen_weapon]["blanks"]
+    story_template = madlibs_stories[chosen_weapon]["story"]
+
+    input_layout = [
+        [sg.Text(f"{i+1}. {blank}:"), sg.Input(key=f"-IN{i}-")] for i, blank in enumerate(blanks)
+    ] + [[sg.Button("Submit")]]
+
+    input_window = sg.Window("Fill in with rage...", input_layout)
+    while True:
+        event, values = input_window.read()
+        if event in (sg.WINDOW_CLOSED, "Exit"):
+            input_window.close()
+            return
+        if event == "Submit":
+            if all(values[f"-IN{i}-"] for i in range(len(blanks))):
+                inputs = [values[f"-IN{i}-"] for i in range(len(blanks))]
+                filled_story = [line.format(*inputs) for line in story_template]
+
+                output_layout = [
+                    [sg.Text(line, size=(60, 2))] for line in filled_story
+                ] + [[sg.Button("Close")]]
+                output_window = sg.Window("Vengeance Delivered", output_layout, finalize=True)
+                input_window.close()
+                
+                while True:
+                    event, _ = output_window.read()
+                    if event in (sg.WINDOW_CLOSED, "Close"):
+                        break
+                output_window.close()
+
+                return
+
+        else:
+            sg.popup("Fill out all fields first!", font=('Courier', 12))
 
 def generate_playlist():
     return "\n".join(random.sample(songsList,5))
@@ -797,7 +876,7 @@ rand_greeting = random.choice(welcGreetings)
 acknowl = random.choice(acknowlMsgs)
 
 # windows bank
-welcWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_welc_layout(rand_greeting), size=(500,400)).finalize()
+welcWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_welc_layout(rand_greeting), size=(500,300)).finalize()
 testWindow = None
 acknowlWindow = None
 feelsWindow = None
@@ -816,7 +895,6 @@ trainWindow = None
 valuesWindow = None 
 motMsgsWindow = None 
 roastWindow = None 
-deathsWindow = None #not started
 
 blankWindow = None #testing screen needed to replace unmade follow-up screens
 
@@ -840,7 +918,6 @@ open_windows = [
     valuesWindow,
     motMsgsWindow,
     roastWindow,
-    deathsWindow,
     blankWindow]
 
 # give the GUI a breather
@@ -865,7 +942,7 @@ while True:
     
     # trans to testWindow when "▶" is clicked from welcWindow
     if window == welcWindow and event == "▶":
-        feelsWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_feels_layout(), size=(500,400)).finalize()
+        feelsWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_feels_layout(), size=(500,300)).finalize()
         welcWindow.close()
         welcWindow = None
     
@@ -873,7 +950,7 @@ while True:
     if feelsWindow and window == feelsWindow:
         if event in ("fine.", ">__<", "drowning...", "dO i HaVe a PerSoNaLitY dIsORdEr?", "*makin' moltovs*"):
             feelInput = event
-            acknowlWindow = sg.Window ("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_acknowl_layout(acknowl), size=(500,400)).finalize()
+            acknowlWindow = sg.Window ("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_acknowl_layout(acknowl), size=(500,300)).finalize()
             feelsWindow.close()
 
     # trans to rand sel on next screen after "▶" is clicked from acknowlWindow
@@ -914,10 +991,11 @@ while True:
             if next_screen == "moltovs1":
                 launch_minesweeper()
                 followup_msg = random.choice(followUpMsgs)
-                followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,400)).finalize()
+                followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,300)).finalize()
             else:
-                # placeholder for deathsWindow
-                deathsWindow = sg.Window("•☽༻¨:·.────Kill────.·:¨༺☾•", make_blank_layout(), size=(500,400)).finalize()
+                run_madlibs()
+                followup_msg = random.choice(followUpMsgs)
+                followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,300)).finalize()
     
     # logic for deadBabWindow
     if deadBabWindow and window == deadBabWindow:
@@ -929,7 +1007,7 @@ while True:
             deadBabWindow['joke_punch'].update('')
         if event == "Done":
             followup_msg = random.choice(followUpMsgs)
-            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,400)).finalize()
+            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,300)).finalize()
             deadBabWindow.close()
             deadBabWindow = None 
     
@@ -944,7 +1022,7 @@ while True:
             ventWindow.close()
             ventWindow = None
             followup_msg = random.choice(followUpMsgs)
-            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,400)).finalize()
+            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,300)).finalize()
     
         elif vent_conf == 'No':
             pass
@@ -963,7 +1041,7 @@ while True:
             story_counter = 1
             title, *lines = choose_story()
             followup_msg = random.choice(followUpMsgs)
-            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,400)).finalize()
+            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,300)).finalize()
             storyWindow.close()
             storylistWindow = None 
     
@@ -974,7 +1052,7 @@ while True:
             window['songs'].update(generate_playlist())
         elif event == "Done":
             followup_msg = random.choice(followUpMsgs)
-            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,400)).finalize()
+            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,300)).finalize()
             playlistWindow.close()
             playlistWindow = None 
     
@@ -1045,7 +1123,7 @@ while True:
                     guidedMedWindow.close()
                     guidedMedWindow = None
                     followup_msg = random.choice(followUpMsgs)
-                    followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,400)).finalize()
+                    followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,300)).finalize()
                     
             elif result == 'No':
                 pass
@@ -1075,7 +1153,7 @@ while True:
                 groundingWindow.close()
                 groundingWindow = None
                 followup_msg = random.choice(followUpMsgs)
-                followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,400)).finalize()
+                followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,300)).finalize()
                 
         elif result == 'No':
             pass
@@ -1104,7 +1182,7 @@ while True:
                 monModWindow.close()
                 monModWindow = None
                 followup_msg = random.choice(followUpMsgs)
-                followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,400)).finalize()
+                followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,300)).finalize()
                 
         elif result == 'No':
             pass
@@ -1133,7 +1211,7 @@ while True:
                 trainWindow.close()
                 trainWindow = None
                 followup_msg = random.choice(followUpMsgs)
-                followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,400)).finalize()
+                followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,300)).finalize()
                 
         elif result == 'No':
             pass
@@ -1145,7 +1223,7 @@ while True:
             window['val_msg'].update(new_val)
         elif event == "Done":
             followup_msg = random.choice(followUpMsgs)
-            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,400)).finalize()
+            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,300)).finalize()
             valuesWindow.close()
             valuesWindow = None 
     
@@ -1156,7 +1234,7 @@ while True:
             window['mot_msg'].update(new_msg)
         elif event == "Done":
             followup_msg = random.choice(followUpMsgs)
-            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,400)).finalize()
+            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,300)).finalize()
             motMsgsWindow.close()
             motMsgsWindow = None 
     
@@ -1167,24 +1245,14 @@ while True:
             window['rand_roast'].update(new_roast)
         elif event == "Done":
             followup_msg = random.choice(followUpMsgs)
-            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,400)).finalize()
+            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,300)).finalize()
             roastWindow.close()
             roastWindow = None 
-    
-    # logic for deathsWindow
-
-    # placeholder windows and "done" buttons for all activities during testing main screens
-    if window and event == "done":
-        if deathsWindow:
-            followup_msg = random.choice(followUpMsgs)
-            followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,400)).finalize()
-            deathsWindow.close()
-            deathsWindow = None
 
     # trans from followUpWindow to checkWindow
     if followUpWindow and window == followUpWindow and event == "continue":
         checkin_msg = random.choice(checkinMsgs)
-        checkWindow = sg.Window("•☽༻¨:·.────Checking In────.·:¨༺☾•", make_check_layout(checkin_msg), size=(500,400)).finalize()
+        checkWindow = sg.Window("•☽༻¨:·.────Checking In────.·:¨༺☾•", make_check_layout(checkin_msg), size=(500,320)).finalize()
         followUpWindow.close()
         followUpWindow = None
     
@@ -1241,7 +1309,7 @@ while True:
                     'motivation': "Motivational Messaging",
                     'roast': "Roast Me",
                     'game': "Mini Game",
-                    'deaths': "Imagine the Brutal Deaths of my Enemies"
+                    'deaths': "Imagine Brutal Deaths of Enemies"
                 }[randAct]
                 
             if copSel == "Dead Baby Jokes":
@@ -1290,9 +1358,11 @@ while True:
                 feels2Window = None
                 launch_minesweeper()
                 followup_msg = random.choice(followUpMsgs)
-                followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,400)).finalize()
+                followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,300)).finalize()
                 
             elif copSel == "Imagine the Brutal Deaths of my Enemies":
                 feels2Window.close()
                 feels2Window = None
-                blankWindow = sg.Window("•☽༻¨:·.────Kill────.·:¨༺☾•", make_blank_layout(), size=(500,400)).finalize()
+                run_madlibs()
+                followup_msg = random.choice(followUpMsgs)
+                followUpWindow = sg.Window("•☽༻¨:·.────₊☽◯☾₊────.·:¨༺☾•", make_followup_layout(followup_msg), size=(500,300)).finalize()
